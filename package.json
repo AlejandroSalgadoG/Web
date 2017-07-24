@@ -1,0 +1,22 @@
+{
+  "name": "image_manager",
+  "version": "1.0.0",
+  "description": "basic image manager ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/AlejandroSalgadoG/Web.git"
+  },
+  "author": "Alejandro Salgado",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/AlejandroSalgadoG/Web/issues"
+  },
+  "homepage": "https://gitlab.com/AlejandroSalgadoG/Web#README",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}

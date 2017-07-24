@@ -12,7 +12,9 @@ app.set('view engine', 'ejs');
 
 // Routes
 app.get('/', routes.home);
-app.post('/login', routes.log);
+app.post('/logged', routes.logged);
+app.get('/register', routes.register);
+app.post('/registration', routes.registration);
 
 var server = app.listen(3000, helper.start_fun);
 function cleanup(){ server.close( helper.end_fun ); }

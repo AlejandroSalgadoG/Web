@@ -2,9 +2,13 @@ var model = require('../database/model');
 
 exports.home = function(req, res){
     res.render('home');
-};
+}
 
-exports.log = function(req, res){
+exports.register = function(req, res){
+    res.render('register');
+}
+
+exports.logged = function(req, res){
     model.consult_user( function(result){
         var user = req.body.user;
         var pass = req.body.password;
@@ -17,3 +21,16 @@ exports.log = function(req, res){
     });
 
 };
+
+exports.registration = function(req, res){
+    var name = req.body.name;
+    var user = req.body.user;
+    var pass = req.body.password;
+    var pass2 = req.body.password2;
+
+    if ((pass == pass2) && (pass != "")){
+        res.redirect('/');
+    }else{
+        res.render('register');
+    }
+}

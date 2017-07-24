@@ -19,6 +19,13 @@ exports.connect_db = function(){
     connection.connect(error_fun);
 }
 
+exports.consult_user = function(callback_fun){
+    var query_var = 'SELECT * FROM users;';
+    connection.query(query_var, function(err, result){
+                callback_fun(result[0]);
+            });
+}
+
 exports.disconnect_db = function(){
     console.log("The application will disconnect from the database");
     connection.end(error_fun);

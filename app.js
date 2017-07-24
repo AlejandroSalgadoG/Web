@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 
-
 // Routes
 app.get('/', routes.home);
 app.post('/login', routes.log);

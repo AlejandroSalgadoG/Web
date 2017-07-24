@@ -5,7 +5,15 @@ exports.home = function(req, res){
 };
 
 exports.log = function(req, res){
-    res.render('home');
-    console.log(req.body.user);
-    console.log(req.body.password);
+    model.consult_user( function(result){
+        var user = req.body.user;
+        var pass = req.body.password;
+
+        var true_user = result.user;
+        var true_pass = result.password;
+
+        if ((user == true_user) && (pass == true_pass)) res.render('logged');
+        else res.redirect('back');
+    });
+
 };

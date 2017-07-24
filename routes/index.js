@@ -5,16 +5,16 @@ exports.home = function(req, res){
 }
 
 exports.register = function(req, res){
-    res.render('register');
+    res.render('register', {error: "" });
 }
 
 exports.logged = function(req, res){
-    model.consult_user( function(result){
+    model.consult_user( function(error, result){
         var user = req.body.user;
         var pass = req.body.password;
 
-        var true_user = result.user;
-        var true_pass = result.password;
+        var true_user = result[0].user;
+        var true_pass = result[0].password;
 
         if ((user == true_user) && (pass == true_pass)) res.render('logged');
         else res.redirect('back');
@@ -29,8 +29,20 @@ exports.registration = function(req, res){
     var pass2 = req.body.password2;
 
     if ((pass == pass2) && (pass != "")){
-        res.redirect('/');
+        var info = [user, pass];
+
+        model.create_user(info,
+            function(err, result){
+                if (err){
+                    console.log(err);
+                    res.render('register', {error: "The user already exists" });
+                }else{
+                    console.log("User creation is finished");
+                    res.redirect('/');
+                }
+            }
+        );
     }else{
-        res.render('register');
+        res.render('register', {error: "" });
     }
 }

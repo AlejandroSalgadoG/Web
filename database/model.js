@@ -14,6 +14,14 @@ var error_fun = function(err) {
     console.log('Action completed');
 }
 
+function execute_query(query_var, callback_fun){
+    connection.query(query_var,
+        function(err, result){
+            callback_fun(err, result);
+        }
+    );
+}
+
 exports.connect_db = function(){
     console.log("The application will connect to the database");
     connection.connect(error_fun);
@@ -21,9 +29,13 @@ exports.connect_db = function(){
 
 exports.consult_user = function(callback_fun){
     var query_var = 'SELECT * FROM users;';
-    connection.query(query_var, function(err, result){
-                callback_fun(result[0]);
-            });
+    execute_query(query_var, callback_fun);
+}
+
+exports.create_user = function(info, callback_fun){
+    console.log(info[0]);
+    var query_var = 'INSERT INTO users VALUES ("'+info[0]+'", "'+info[1]+'");';
+    execute_query(query_var, callback_fun);
 }
 
 exports.disconnect_db = function(){

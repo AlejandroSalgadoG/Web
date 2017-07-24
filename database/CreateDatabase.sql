@@ -1,11 +1,12 @@
+DROP DATABASE image_manager;
+
 CREATE DATABASE image_manager;
 USE image_manager;
 
 CREATE TABLE users(
-    userid int AUTO_INCREMENT,
-    user varchar(255),
+    user varchar(32),
     password varchar(255),
-    PRIMARY KEY (userid)
+    PRIMARY KEY (user)
 );
 
 CREATE TABLE images(
@@ -18,10 +19,10 @@ CREATE TABLE images(
 );
 
 CREATE TABLE associations(
-    userid int,
+    userid varchar(32),
     imageid int,
     PRIMARY KEY (userid, imageid),
-    CONSTRAINT FK_userid FOREIGN KEY (userid) REFERENCES users(userid),
+    CONSTRAINT FK_userid FOREIGN KEY (userid) REFERENCES users(user),
     CONSTRAINT FK_imageid FOREIGN KEY (imageid) REFERENCES images(imageid)
 );
 

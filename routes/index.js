@@ -22,7 +22,7 @@ exports.logged = function(req, res){
 
             var true_pass = result[0].password;
 
-            if (pass == true_pass) res.render('logged', { user: user });
+            if (pass == true_pass) res.render('logged');
             else res.render('home', {error: "Incorrect user or password",
                                      msg: "" });
         }
@@ -75,6 +75,11 @@ exports.delete_user = function(req, res){
                 console.log(err);
             }
 
+            if (result.length == 0){
+                res.render('logged');
+                return;
+            }
+
             var pass = req.body.password;
             var true_pass = result[0].password;
 
@@ -89,7 +94,7 @@ exports.delete_user = function(req, res){
                     }
                 );
             }
-            else res.render('logged', { user: user });
+            else res.render('logged');
         }
     );   
 }

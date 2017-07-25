@@ -33,8 +33,12 @@ exports.consult_password = function(user, callback_fun){
 }
 
 exports.create_user = function(info, callback_fun){
-    console.log(info[0]);
     var query_var = 'INSERT INTO users VALUES ("'+info[0]+'", "'+info[1]+'");';
+    execute_query(query_var, callback_fun);
+}
+
+exports.delete_user = function(user, callback_fun){
+    var query_var = 'DELETE FROM users WHERE user="'+user+'";';
     execute_query(query_var, callback_fun);
 }
 

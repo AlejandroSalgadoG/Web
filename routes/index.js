@@ -9,17 +9,19 @@ exports.register = function(req, res){
 }
 
 exports.logged = function(req, res){
-    model.consult_user( function(error, result){
-        var user = req.body.user;
-        var pass = req.body.password;
+    model.consult_password(req.body.user,
+        function(err, result){
+            if (err){
+                console.log(err);
+            }
 
-        var true_user = result[0].user;
-        var true_pass = result[0].password;
+            var pass = req.body.password;
+            var true_pass = result[0].password;
 
-        if ((user == true_user) && (pass == true_pass)) res.render('logged');
-        else res.redirect('back');
-    });
-
+            if (pass == true_pass) res.render('logged');
+            else res.redirect('back');
+        }
+    );
 };
 
 exports.registration = function(req, res){

@@ -6,6 +6,7 @@ exports.home = function(req, res){
 
 exports.logged = function(req, res){
     var user = req.body.user;
+    var pass = req.body.password;
 
     model.consult_password(user,
         function(err, result){
@@ -13,20 +14,25 @@ exports.logged = function(req, res){
                 console.log(err);
             }
 
-            var pass = req.body.password;
+            if (result.length == 0){
+                res.render('home', {error: "Bad user",
+                                    msg: "" });
+                return;
+            }
+
             var true_pass = result[0].password;
 
             if (pass == true_pass) res.render('logged', { user: user });
-            else res.redirect('back');
+            else res.render('home', {error: "Incorrect user or password",
+                                     msg: "" });
         }
     );
 };
 
 exports.registration = function(req, res){
-    var name = req.body.name;
-    var user = req.body.user;
-    var pass = req.body.password;
-    var pass2 = req.body.password2;
+    var user = req.body.ruser;
+    var pass = req.body.rpassword;
+    var pass2 = req.body.rpassword2;
 
     if ((pass == pass2) && (pass != "")){
         var info = [user, pass];
@@ -37,7 +43,6 @@ exports.registration = function(req, res){
                     res.render('home', {error: "The user already exists",
                                         msg: "" });
                 }else{
-                    console.log("User creation is finished");
                     res.render('home', {error: "",
                                         msg: "The user has been created" });
                 }

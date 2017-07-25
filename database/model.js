@@ -27,8 +27,13 @@ exports.connect_db = function(){
     connection.connect(error_fun);
 }
 
+exports.consult_users = function(callback_fun){
+    var query_var = 'SELECT user FROM users;';
+    execute_query(query_var, callback_fun);
+}
+
 exports.consult_password = function(user, callback_fun){
-    var query_var = 'SELECT * FROM users WHERE user="'+user+'";';
+    var query_var = 'SELECT password FROM users WHERE user="'+user+'";';
     execute_query(query_var, callback_fun);
 }
 

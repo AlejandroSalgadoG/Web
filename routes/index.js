@@ -54,6 +54,18 @@ exports.registration = function(req, res){
     }
 }
 
+exports.read_users = function(req, res){
+    model.consult_users(
+        function(err, result){
+            if (err){
+                console.log(err);
+            }
+
+            res.render('users', { mysql : result } );
+        }
+    );
+}
+
 exports.delete_user = function(req, res){
     var user = req.body.user;
 

@@ -15,6 +15,7 @@ app.get('/', routes.home);
 app.post('/logged', routes.logged);
 app.post('/register', routes.registration);
 app.post('/delete', routes.delete_user);
+app.get('/users', routes.read_users);
 
 var server = app.listen(3000, helper.start_fun);
 function cleanup(){ server.close( helper.end_fun ); }

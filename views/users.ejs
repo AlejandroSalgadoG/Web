@@ -1,0 +1,11 @@
+<html>
+    <body>
+        <h1> Existing users are </h1>
+
+        <ul>
+            <% for (var i=0;i<mysql.length;i++){ %>
+                <li> <%= mysql[i].user %> </li>
+            <% } %>
+        </ul>
+    </body>
+</html>

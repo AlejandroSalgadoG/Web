@@ -98,3 +98,12 @@ exports.delete_user = function(req, res){
         }
     );   
 }
+
+exports.setcookie = function(req, res){
+    res.cookie('cookieName2',1).render('logged');
+    console.log('cookie created successfully');
+}
+
+exports.getcookie = function(req, res){
+    console.log(req.cookies);
+}

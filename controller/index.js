@@ -1,4 +1,4 @@
-var model = require('../database/model');
+var model = require('../model/model');
 
 exports.home = function(req, res){
     res.render('home', { error: "", msg: "" });

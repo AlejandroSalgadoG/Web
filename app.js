@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var routes = require('./routes');
+var routes = require('./controller');
 var helper = require('./app_helper');
 
 var app = express();

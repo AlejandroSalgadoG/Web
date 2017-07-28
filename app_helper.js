@@ -1,4 +1,4 @@
-var model = require('./database/model');
+var model = require('./model/model');
 
 exports.start_fun = function(){
     model.connect_db();

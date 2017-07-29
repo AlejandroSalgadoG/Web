@@ -17,8 +17,8 @@ app.get('/', routes.home);
 app.post('/login', routes.login);
 app.post('/logout', routes.logout);
 app.post('/register', routes.registration);
-app.post('/delete', routes.delete_user);
-app.post('/update', routes.update_user);
+app.post('/delete_user', routes.delete_user);
+app.post('/update_password', routes.update_user);
 app.get('/read_users', routes.read_users);
 
 var server = app.listen(3000, helper.start_fun);

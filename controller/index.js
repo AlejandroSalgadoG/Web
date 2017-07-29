@@ -4,7 +4,7 @@ exports.home = function(req, res){
     res.render('home', { msg: "" });
 }
 
-exports.logged = function(req, res){
+exports.login = function(req, res){
     var user = req.body.user;
     var pass = req.body.password;
 
@@ -30,6 +30,11 @@ exports.logged = function(req, res){
             else res.render('home', { msg: "Bad password" });
         }
     );
+};
+
+exports.logout = function(req, res){
+    res.clearCookie('user');
+    res.redirect('/');
 };
 
 exports.registration = function(req, res){

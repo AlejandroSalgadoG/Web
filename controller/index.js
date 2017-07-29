@@ -24,9 +24,14 @@ exports.logged = function(req, res){
 
             if (pass == true_pass){ 
                 var age = 10 * 60 * 1000;
-                res.cookie('user', user, {maxAge: age}).render('logged');
-            }else res.render('home', {error: "Incorrect user or password",
+                res.cookie('user', user, {maxAge: age});
+                res.render('logged', { user: user,
+                                       error: "",
+                                       msg: "" });
+            }else{
+                res.render('home', { error: "Bad password",
                                      msg: "" });
+            }
         }
     );
 };
@@ -36,83 +41,103 @@ exports.registration = function(req, res){
     var pass = req.body.rpassword;
     var pass2 = req.body.rpassword2;
 
-    if ((pass == pass2) && (pass != "")){
-        var info = [user, pass];
-
-        model.create_user(info,
-            function(err, result){
-                if (err){
-                    res.render('home', {error: "The user already exists",
-                                        msg: "" });
-                }else{
-                    res.render('home', {error: "",
-                                        msg: "The user has been created" });
-                }
-            }
-        );
-    }else{
-        res.render('home', {error: "Bad passwords",
-                            msg: "" });
+    if ((pass != pass2) || (pass == "")){
+        res.render('home', {error: "Bad passwords", msg: "" });
+        return;
     }
+
+    model.create_user( { user: user, password: pass },
+        function(err, result){
+            if (err) res.render('home', { error: err, msg: "" });
+            else res.render('home', { error: "", msg: "The user has been created" });
+        }
+    );
 }
 
 exports.read_users = function(req, res){
     model.consult_users(
         function(err, result){
-            if (err){
-                console.log(err);
-            }
-
-            res.render('users', { mysql : result } );
+            if (err) res.render('users', { mysql : "", error: err } );
+            else res.render('users', { mysql : result, error: "" } );
         }
     );
 }
 
 exports.delete_user = function(req, res){
-    var user = req.body.user;
+    var user = req.cookies.user;
+    var pass = req.body.password;
 
     model.consult_password(user,
         function(err, result){
             if (err){
-                console.log(err);
+                res.render('logged', { user: user,
+                                       error: err,
+                                       msg: "" });
             }
 
-            if (result.length == 0){
-                res.render('logged');
-                return;
-            }
-
-            var pass = req.body.password;
             var true_pass = result[0].password;
 
             if (pass == true_pass){
                 model.delete_user(user,
                     function(err, result){
                         if (err){
-                            console.log("User deletion has failed");
+                            res.render('logged', { user: user,
+                                                   error: err,
+                                                   msg: "" });
                         }else{
                             res.redirect('/');
                         }
                     }
                 );
             }
-            else res.render('logged');
+            else res.render('logged', { user: user,
+                                        error: "Bad password",
+                                        msg: "" });
         }
     );   
 }
+
 exports.update_user = function(req, res){
-    console.log('user', req.cookies.user);
-    console.log('old password', req.body.old_password);
-    console.log('new password', req.body.new_password);
-    console.log('new password2', req.body.new_password2);
-}
+    var user = req.cookies.user;
+    var old_pass = req.body.old_password;
+    var new_pass = req.body.new_password;
+    var new_pass2 = req.body.new_password2;
 
-exports.getcookie = function(req, res){
-    console.log(req.cookies);
-}
+    if ((new_pass != new_pass2) || (new_pass == "")){
+        res.render('logged', { user: user, 
+                               error: "Bad passwords",
+                               msg: "" });
+        return;
+    }
 
-exports.clearCookie = function(req, res){
-    res.clearCookie('user').render('home', {error: "",
-                                            msg: "cookie removed" });
-    console.log('cookie deleted');
+    model.consult_password(user,
+        function(err, result){
+            if (err){
+                res.render('logged', { user: user,
+                                       error: err,
+                                       msg: "" });
+            }
+
+            var true_pass = result[0].password;
+
+            if (old_pass == true_pass){
+                model.change_password( { user: user, password: new_pass },
+                    function(err, result){
+                        if (err){
+                            res.render('logged', { user: user,
+                                                   error: err,
+                                                   msg: "" });
+                        }else{
+                            res.render('logged', { user: user,
+                                                   error: "",
+                                                   msg: "User updated" });
+                        }
+                    }
+                );
+            }
+            else res.render('logged', { user: user,
+                                        error: "Bad password",
+                                        msg: "" });
+        }
+    );
 }

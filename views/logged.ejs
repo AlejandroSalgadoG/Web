@@ -2,14 +2,14 @@
     <body>
         <h1> Welcome </h1>
 
-        <h2> Cookie section </h2>
-        <form action='/setcookie' method="post">
-            <button type="submit"> Set cookie </button>
+        <h2> Update account</h2>
+        <form action='/update' method="post">
+            Old password: <input type="password" name="old_password"><br>
+            New password: <input type="password" name="new_password"><br>
+            Retype new password: <input type="password" name="new_password2"><br>
+            <button type="submit"> Update </button>
         </form>
 
-        <form action='/getcookie' method="post">
-            <button type="submit"> Get cookie </button>
-        </form>
 
         <h2> Delete account </h2>
         <form action='/delete' method="post">

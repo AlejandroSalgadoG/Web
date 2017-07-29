@@ -22,8 +22,10 @@ exports.logged = function(req, res){
 
             var true_pass = result[0].password;
 
-            if (pass == true_pass) res.render('logged');
-            else res.render('home', {error: "Incorrect user or password",
+            if (pass == true_pass){ 
+                var age = 10 * 60 * 1000;
+                res.cookie('user', user, {maxAge: age}).render('logged');
+            }else res.render('home', {error: "Incorrect user or password",
                                      msg: "" });
         }
     );
@@ -98,12 +100,19 @@ exports.delete_user = function(req, res){
         }
     );   
 }
-
-exports.setcookie = function(req, res){
-    res.cookie('cookieName2',1).render('logged');
-    console.log('cookie created successfully');
+exports.update_user = function(req, res){
+    console.log('user', req.cookies.user);
+    console.log('old password', req.body.old_password);
+    console.log('new password', req.body.new_password);
+    console.log('new password2', req.body.new_password2);
 }
 
 exports.getcookie = function(req, res){
     console.log(req.cookies);
+}
+
+exports.clearCookie = function(req, res){
+    res.clearCookie('user').render('home', {error: "",
+                                            msg: "cookie removed" });
+    console.log('cookie deleted');
 }

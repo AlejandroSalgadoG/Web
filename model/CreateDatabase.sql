@@ -1,4 +1,6 @@
+/*
 DROP DATABASE image_manager;
+*/
 
 CREATE DATABASE image_manager;
 USE image_manager;
@@ -31,7 +33,7 @@ INSERT INTO users (user, password) VALUES ('asalgad2', 'jaja19');
 INSERT INTO images (name, type, size, dimension) VALUES ('img1', 'jpg', '1MB', '512x512');
 */
 
-/*
+
 CREATE USER 'alejandro' IDENTIFIED BY 'jaja19';
 GRANT ALL ON image_manager.* TO alejandro;
-*/
+

@@ -151,3 +151,11 @@ exports.read_shared_images = function(req, res){
         }
     );
 }
+
+exports.create_image = function(req, res){
+    console.log(req.body.img_name);
+    console.log(req.body.img_type);
+    console.log(req.body.img_size);
+    console.log(req.body.img_dimension);
+    console.log(req.body.img_private, req.body.img_public);
+}

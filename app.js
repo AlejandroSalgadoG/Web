@@ -23,6 +23,7 @@ app.get('/read_users', routes.read_users);
 app.get('/read_public_images', routes.read_public_images);
 app.post('/read_private_images', routes.read_private_images);
 app.post('/read_shared_images', routes.read_shared_images);
+app.post('/create_image', routes.create_image);
 
 var server = app.listen(3000, helper.start_fun);
 function cleanup(){ server.close( helper.end_fun ); }

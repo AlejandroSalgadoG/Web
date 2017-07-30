@@ -2,24 +2,43 @@
     <body>
         <h1> Welcome <%= user %> </h1>
 
-        <h2> Update password</h2>
-        <form action='/update_password' method="post">
-            Old password: <input type="password" name="old_password"><br>
-            New password: <input type="password" name="new_password"><br>
-            Retype new password: <input type="password" name="new_password2"><br>
-            <button type="submit"> Update </button>
-        </form>
+        <div class="user" style="float: left">
+            <h2> Update password</h2>
+            <form action='/update_password' method="post">
+                Old password: <input type="password" name="old_password"><br>
+                New password: <input type="password" name="new_password"><br>
+                Retype new password: <input type="password" name="new_password2"><br>
+                <button type="submit"> Update </button>
+            </form>
 
-        <h2> Delete account </h2>
-        <form action='/delete_user' method="post">
-            Password: <input type="password" name="password"><br>
-            <button type="submit"> Delete </button>
-        </form>
+            <h2> Delete account </h2>
+            <form action='/delete_user' method="post">
+                Password: <input type="password" name="password"><br>
+                <button type="submit"> Delete </button>
+            </form>
 
-        <h2> Log out </h2>
-        <form action='/logout' method="post">
-            <button type="submit"> Log out </button>
-        </form>
+            <h2> Log out </h2>
+            <form action='/logout' method="post">
+                <button type="submit"> Log out </button>
+            </form>
+        </div>
+
+        <div class="image" style="float: right">
+            <h2> view public images </h2>
+            <form action='/read_public_images'>
+                <button type="submit"> Consult </button>
+            </form>
+
+            <h2> My images </h2>
+            <form action='/read_private_images' method="post">
+                <button type="submit"> Consult </button>
+            </form>
+
+            <h2> Shared images </h2>
+            <form action='/read_shared_images' method="post">
+                <button type="submit"> Consult </button>
+            </form>
+        </div>
 
         <%= msg %>
     </body>

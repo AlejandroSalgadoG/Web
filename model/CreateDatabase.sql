@@ -32,7 +32,7 @@ CREATE TABLE associations(
 
 /*
 INSERT INTO users (user, password) VALUES ('alejandro', 'jaja19');
-INSERT INTO images (name, type, size, dimension) VALUES ('img1', 'jpg', '1MB', '512x512', 'true');
+INSERT INTO images (name, type, size, dimension, private) VALUES ('img1', 'jpg', '1MB', '512x512', 'true');
 */
 
 /*

@@ -122,3 +122,32 @@ exports.update_user = function(req, res){
         }
     );
 }
+
+exports.read_public_images = function(req, res){
+    model.read_public_images(
+        function(err, result){
+            if (err) res.render('images', { type: "Public", mysql : "", msg: err } );
+            else res.render('images', { type: "Public", mysql : result, msg: "" } );
+        }
+    );
+}
+
+exports.read_private_images = function(req, res){
+    model.read_private_images(
+        function(err, result){
+            if (err) res.render('images', { type: "Private", mysql : "", msg: err } );
+            else res.render('images', { type: "Private", mysql : result, msg: "" } );
+        }
+    );
+}
+
+exports.read_shared_images = function(req, res){
+    var user = req.cookies.user;
+
+    model.read_shared_images(user,
+        function(err, result){
+            if (err) res.render('images', { type: "Shared", mysql : "", msg: err } );
+            else res.render('images', { type: "Shared", mysql : result, msg: "" } );
+        }
+    );
+}

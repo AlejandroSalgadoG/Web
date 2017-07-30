@@ -53,6 +53,21 @@ exports.change_password = function(info, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
+exports.read_public_images = function(callback_fun){
+    var query_var = 'SELECT * FROM images WHERE private="false";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.read_private_images = function(callback_fun){
+    var query_var = 'SELECT * FROM images WHERE private="true";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.read_shared_images = function(user, callback_fun){
+    var query_var = 'SELECT * FROM associations WHERE owner="false" AND userid="'+user+'";';
+    execute_query(query_var, callback_fun);
+}
+
 exports.disconnect_db = function(){
     console.log("The application will disconnect from the database");
     connection.end(error_fun);

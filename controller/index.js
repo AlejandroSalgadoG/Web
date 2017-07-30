@@ -25,7 +25,7 @@ exports.login = function(req, res){
             if (pass == true_pass){ 
                 var age = 10 * 60 * 1000;
                 res.cookie('user', user, {maxAge: age});
-                res.render('logged', { user: user, msg: "" });
+                res.render('logged', { user: user, search: {}, msg: "" });
             }
             else res.render('home', { msg: "Bad password" });
         }
@@ -71,7 +71,7 @@ exports.delete_user = function(req, res){
     model.consult_password(user,
         function(err, result){
             if (err){
-                res.render('logged', { user: user, msg: err });
+                res.render('logged', { user: user, search: {}, msg: err });
                 return;
             }
 
@@ -80,12 +80,12 @@ exports.delete_user = function(req, res){
             if (pass == true_pass){
                 model.delete_user(user,
                     function(err, result){
-                        if (err) res.render('logged', { user: user, msg: err });
+                        if (err) res.render('logged', { user: user, search: {}, msg: err });
                         else res.redirect('/');
                     }
                 );
             }
-            else res.render('logged', { user: user, msg: "Bad password" });
+            else res.render('logged', { user: user, search: {}, msg: "Bad password" });
         }
     );   
 }
@@ -97,14 +97,14 @@ exports.update_user = function(req, res){
     var new_pass2 = req.body.new_password2;
 
     if ((new_pass != new_pass2) || (new_pass == "")){
-        res.render('logged', { user: user, msg: "Bad passwords" });
+        res.render('logged', { user: user, search: {}, msg: "Bad passwords" });
         return;
     }
 
     model.consult_password(user,
         function(err, result){
             if (err){
-                res.render('logged', { user: user, msg: "" });
+                res.render('logged', { user: user, search: {}, msg: "" });
                 return;
             }
 
@@ -113,41 +113,63 @@ exports.update_user = function(req, res){
             if (old_pass == true_pass){
                 model.change_password( { user: user, password: new_pass },
                     function(err, result){
-                        if (err) res.render('logged', { user: user, msg: err });
-                        else res.render('logged', { user: user, msg: "User updated" });
+                        if (err) res.render('logged', { user: user, search: {}, msg: err });
+                        else res.render('logged', { user: user, search: {}, msg: "User updated" });
                     }
                 );
             }
-            else res.render('logged', { user: user, msg: "Bad password" });
+            else res.render('logged', { user: user, search: {}, msg: "Bad password" });
         }
     );
 }
 
-exports.read_public_images = function(req, res){
-    model.read_public_images(
-        function(err, result){
-            if (err) res.render('images', { type: "Public", mysql : "", msg: err } );
-            else res.render('images', { type: "Public", mysql : result, msg: "" } );
-        }
-    );
-}
-
-exports.read_private_images = function(req, res){
-    model.read_private_images(
-        function(err, result){
-            if (err) res.render('images', { type: "Private", mysql : "", msg: err } );
-            else res.render('images', { type: "Private", mysql : result, msg: "" } );
-        }
-    );
-}
-
-exports.read_shared_images = function(req, res){
+exports.search_public_images = function(req, res){
     var user = req.cookies.user;
-
-    model.read_shared_images(user,
+    model.search_public_images(
         function(err, result){
-            if (err) res.render('images', { type: "Shared", mysql : "", msg: err } );
-            else res.render('images', { type: "Shared", mysql : result, msg: "" } );
+            if (err) res.render('logged', { user: user, search : {}, msg: err } );
+            else res.render('logged', { user: user, search : result, msg: "" } );
+        }
+    );
+}
+
+exports.search_private_images = function(req, res){
+    var user = req.cookies.user;
+    model.search_private_images(user,
+        function(err, result){
+            if (err) res.render('logged', { user: user, search : {}, msg: err } );
+            else res.render('logged', { user: user, search : result, msg: "" } );
+        }
+    );
+}
+
+exports.search_shared_images = function(req, res){
+    var user = req.cookies.user;
+    model.search_shared_images(user,
+        function(err, result){
+            if (err) res.render('logged', { user: user, search : {}, msg: err } );
+            else res.render('logged', { user: user, search : result, msg: "" } );
+        }
+    );
+}
+
+exports.search_user_images = function(req, res){
+    var user = req.cookies.user;
+    var image = req.body.img_search;
+
+    model.search_user_image(user, image,
+        function(err, result){
+            if (err){
+                res.render('logged', { user: user, search: {}, msg: err });
+                return;
+            }
+
+            if (result.length == 0){
+                res.render('logged', { user: user, search: {}, msg: "Bad image" });
+                return;
+            }
+
+            res.render('logged', { user: user, search : result, msg: "" } );
         }
     );
 }
@@ -166,14 +188,14 @@ exports.create_image = function(req, res){
 
     model.create_image(img_info,
         function(err, result){
-            if (err) res.render('logged', { user: user, msg: err });
+            if (err) res.render('logged', { user: user, search: {}, msg: err });
         }
     );
 
     model.add_private_association(user, img_info.name,
         function(err, result){
-            if (err) res.render('logged', { user: user, msg: err });
-            else res.render('logged', { user: user, msg: "image created" });
+            if (err) res.render('logged', { user: user, search: {}, msg: err });
+            else res.render('logged', { user: user, search: {}, msg: "image created" });
         }
     );
 }
@@ -185,25 +207,25 @@ exports.delete_image = function(req, res){
     model.search_user_image(user, image,
         function(err, result){
             if (err){
-                res.render('logged', { user: user, msg: err });
+                res.render('logged', { user: user, search: {}, msg: err });
                 return;
             }
 
             if (result.length == 0){
-                res.render('logged', { user: user, msg: "Bad image" });
+                res.render('logged', { user: user, search: {}, msg: "Bad image" });
                 return;
             }
 
             model.delete_image_associations(user, image,
                 function(err, result){
-                    if (err) res.render('logged', { user: user, msg: err });
+                    if (err) res.render('logged', { user: user, search: {}, msg: err });
                 }
             ); 
 
             model.delete_image(image,
                 function(err, result){
-                    if (err) res.render('logged', { user: user, msg: err });
-                    else res.render('logged', { user: user, msg: "Image deleted" });
+                    if (err) res.render('logged', { user: user, search: {}, msg: err });
+                    else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
                 }
             ); 
         }

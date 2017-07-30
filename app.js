@@ -20,10 +20,12 @@ app.post('/register', routes.registration);
 app.post('/delete_user', routes.delete_user);
 app.post('/update_password', routes.update_user);
 app.get('/read_users', routes.read_users);
-app.get('/read_public_images', routes.read_public_images);
-app.post('/read_private_images', routes.read_private_images);
-app.post('/read_shared_images', routes.read_shared_images);
+app.post('/search_public_images', routes.search_public_images);
+app.post('/search_private_images', routes.search_private_images);
+app.post('/search_shared_images', routes.search_shared_images);
+app.post('/search_user_images', routes.search_user_images);
 app.post('/create_image', routes.create_image);
+app.post('/delete_image', routes.delete_image);
 
 var server = app.listen(3000, helper.start_fun);
 function cleanup(){ server.close( helper.end_fun ); }

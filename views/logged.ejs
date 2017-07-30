@@ -4,16 +4,29 @@
             width: 33%;
             float: left;
         }
-        .read_image {
+
+        .search {
             width: 33%;
             float: left;
         }
+
+        .search_buttons form{
+            display: inline-block;
+        }
+
+        .display{
+            height: 50%; 
+            width: 85%;
+            overflow-y:scroll;
+        }
+
+        th{
+            border: 1px solid black;
+        }
+
         .image_operations {
             width: 33%;
             float: left;
-        }
-        fieldset {
-            border: 0;
         }
     </style>
 
@@ -41,25 +54,49 @@
             </form>
         </div>
 
-        <div class="read_image">
-            <h2> view images </h2>
+        <div class="search">
+            <div class="search_buttons">
+                <h2> Search images </h2>
 
-            <h2> Public images </h2>
-            <form action='/read_public_images'>
-                <button type="submit"> Consult </button>
-            </form>
+                <form action='/search_user_images' method="post">
+                    <input type="text" name="img_search">
+                    <button type="submit"> Search </button> 
+                </form>
+                
+                <br>
 
-            <h2> My images </h2>
-            <form action='/read_private_images' method="post">
-                <button type="submit"> Consult </button>
-            </form>
+                <form action='/search_public_images' method="post">
+                    <button type="submit"> Public </button>
+                </form>
+                <form action='/search_private_images' method="post">
+                    <button type="submit"> My images </button>
+                </form>
+                <form action='/search_shared_images' method="post">
+                    <button type="submit"> Shared </button>
+                </form>
+            </div>
 
-            <h2> Shared images </h2>
-            <form action='/read_shared_images' method="post">
-                <button type="submit"> Consult </button>
-            </form>
+            <div class="display"> 
+                <table>
+                    <tr>
+                        <th> Name </th>
+                        <th> Type </th>
+                        <th> Size </th>
+                        <th> Dimension </th>
+                    </tr>
+
+                    <% for(var i=0; i<search.length; i++){ %>
+                        <tr>
+                            <th> <%= search[i].name %> </th>
+                            <th> <%= search[i].type %> </th>
+                            <th> <%= search[i].size %> </th>
+                            <th> <%= search[i].dimension %> </th>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
         </div>
-
+        
         <div class="image_operations">
             <h2> Create image </h2>
 

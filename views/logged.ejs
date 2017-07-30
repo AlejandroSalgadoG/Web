@@ -17,7 +17,6 @@
         }
     </style>
 
-
     <body>
         <h1> Welcome <%= user %> </h1>
 
@@ -70,8 +69,8 @@
                 Size (MB): <input type="text" name="img_size" placeholder="1"><br>
                 Dimension: <input type="text" name="img_dimension" placeholder="512x512"><br>
 
-                Scope: <input type="radio" name="img_private" id="img_private" onclick="private_btn(this)"> Private
-                <input type="radio" name="img_public" id="img_public" onclick="public_btn(this)"> Public <br>
+                Scope: <input type="radio" name="img_private" id="img_private" onclick='radar_handler("private")' checked> Private
+                <input type="radio" name="img_public" id="img_public" onclick='radar_handler("public")'> Public <br>
 
                 <button type="submit"> Create </button>
             </form>
@@ -81,23 +80,18 @@
     </body>
 
     <script>
-        var private;
-        var public;
+        var private_btn = document.getElementById('img_private');
+        var public_btn = document.getElementById('img_public');
 
-        function private_btn(btn) {
-            if (private == true){
-                btn.checked = false;
-                private = false;
+        function radar_handler(btn){
+            if (btn == "private"){
+                private_btn.checked = true; 
+                public_btn.checked = false; 
             }
-            else private = true;
-        }
-
-        function public_btn(btn) {
-            if (public == true){
-                btn.checked = false;
-                public = false;
+            else if (btn == "public"){
+                private_btn.checked = false; 
+                public_btn.checked = true; 
             }
-            else public = true;
         }
     </script>
 </html>

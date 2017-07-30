@@ -68,9 +68,20 @@ exports.read_shared_images = function(user, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
+exports.create_image = function(info, callback_fun){
+    var query_var = 'INSERT INTO images (name, type, size, dimension, private) \
+                     VALUES ("'+info.name+'", "'+info.type+'", '+info.size+', "'+info.dimension+'", "'+info.scope+'");';
+    execute_query(query_var, callback_fun);
+}
+
+exports.add_private_association = function(user, img, callback_fun){
+    var query_var = 'INSERT INTO associations \
+                     VALUES ("'+user+'", "'+img+'", "true");';
+    execute_query(query_var, callback_fun);
+}
+
 exports.disconnect_db = function(){
     console.log("The application will disconnect from the database");
     connection.end(error_fun);
-
     console.log('Good bye');
 }

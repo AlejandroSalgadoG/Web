@@ -153,9 +153,27 @@ exports.read_shared_images = function(req, res){
 }
 
 exports.create_image = function(req, res){
-    console.log(req.body.img_name);
-    console.log(req.body.img_type);
-    console.log(req.body.img_size);
-    console.log(req.body.img_dimension);
-    console.log(req.body.img_private, req.body.img_public);
+    var user = req.cookies.user;
+
+    if (req.body.img_private == "on") var img_scope = "true";
+    else var img_scope = "false";
+
+    var img_info = { name: req.body.img_name,
+                 type: req.body.img_type,
+                 size: req.body.img_size,
+                 dimension: req.body.img_dimension,
+                 scope: img_scope }; 
+
+    model.create_image(img_info,
+        function(err, result){
+            if (err) res.render('logged', { user: user, msg: err });
+        }
+    );
+
+    model.add_private_association(user, img_info.name,
+        function(err, result){
+            if (err) res.render('logged', { user: user, msg: err });
+            else res.render('logged', { user: user, msg: "image created" });
+        }
+    );
 }

@@ -8,7 +8,7 @@
             width: 33%;
             float: left;
         }
-        .create_image {
+        .image_operations {
             width: 33%;
             float: left;
         }
@@ -60,7 +60,7 @@
             </form>
         </div>
 
-        <div class="create_image">
+        <div class="image_operations">
             <h2> Create image </h2>
 
             <form action='/create_image' method="post">
@@ -74,6 +74,14 @@
 
                 <button type="submit"> Create </button>
             </form>
+
+            <h2> Delete image </h2>
+
+            <form action='/delete_image' method="post">
+                Name: <input type="text" name="del_img_name" placeholder="img1"><br>
+                <button type="submit"> delete </button>
+            </form>
+
         </div>
 
         <%= msg %>

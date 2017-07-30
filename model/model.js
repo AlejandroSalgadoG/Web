@@ -80,6 +80,21 @@ exports.add_private_association = function(user, img, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
+exports.search_user_image = function(user, img, callback_fun){
+    var query_var = 'SELECT imageid FROM associations WHERE userid="'+user+'" AND imageid="'+img+'" AND owner="true";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.delete_image = function(img, callback_fun){
+    var query_var = ' DELETE FROM images WHERE name="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.delete_image_associations = function(user, img, callback_fun){
+    var query_var = ' DELETE FROM associations WHERE userid="'+user+'" AND imageid="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
 exports.disconnect_db = function(){
     console.log("The application will disconnect from the database");
     connection.end(error_fun);

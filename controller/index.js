@@ -177,3 +177,35 @@ exports.create_image = function(req, res){
         }
     );
 }
+
+exports.delete_image = function(req, res){
+    var user = req.cookies.user;
+    var image = req.body.del_img_name;
+
+    model.search_user_image(user, image,
+        function(err, result){
+            if (err){
+                res.render('logged', { user: user, msg: err });
+                return;
+            }
+
+            if (result.length == 0){
+                res.render('logged', { user: user, msg: "Bad image" });
+                return;
+            }
+
+            model.delete_image_associations(user, image,
+                function(err, result){
+                    if (err) res.render('logged', { user: user, msg: err });
+                }
+            ); 
+
+            model.delete_image(image,
+                function(err, result){
+                    if (err) res.render('logged', { user: user, msg: err });
+                    else res.render('logged', { user: user, msg: "Image deleted" });
+                }
+            ); 
+        }
+    );
+}

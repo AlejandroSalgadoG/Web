@@ -263,16 +263,25 @@ exports.delete_image = function(req, res){
 
             model.delete_image_associations(user, image,
                 function(err, result){
-                    if (err) res.render('logged', { user: user, search: {}, msg: err });
+                    if (err){
+                        res.render('logged', { user: user, search: {}, msg: err });
+                        return;
+                    }
                 }
             ); 
 
-            model.delete_image(image,
-                function(err, result){
-                    if (err) res.render('logged', { user: user, search: {}, msg: err });
-                    else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
-                }
-            ); 
+            if (result[0].owner == true){
+                model.delete_image(image,
+                    function(err, result){
+                        if (err){
+                            res.render('logged', { user: user, search: {}, msg: err });
+                            return;
+                        }
+                    }
+                ); 
+            }
+
+            res.render('logged', { user: user, search: {}, msg: "Image deleted" });
         }
     );
 }

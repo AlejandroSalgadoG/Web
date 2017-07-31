@@ -85,9 +85,9 @@ exports.add_private_association = function(user, img, callback_fun){
 }
 
 exports.search_user_image = function(user, img, callback_fun){
-    var query_var = 'SELECT name,type,size,dimension \
+    var query_var = 'SELECT * \
                      FROM images INNER JOIN associations ON name=imageid \
-                     WHERE owner="true" AND userid="'+user+'" AND imageid="'+img+'";';
+                     WHERE userid="'+user+'" AND imageid="'+img+'";';
     execute_query(query_var, callback_fun);
 }
 

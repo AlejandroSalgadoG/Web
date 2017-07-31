@@ -1,6 +1,11 @@
 <html>
     <style>
-        .user {
+        .account form{
+            float: right;
+            display: inline-block;
+        }
+
+        .update {
             width: 33%;
             float: left;
         }
@@ -24,7 +29,7 @@
             border: 1px solid black;
         }
 
-        .image_operations {
+        .create_delete {
             width: 33%;
             float: left;
         }
@@ -33,24 +38,30 @@
     <body>
         <h1> Welcome <%= user %> </h1>
 
-        <div class="user">
-            <h2> Update password</h2>
-            <form action='/update_password' method="post">
-                Old password: <input type="password" name="old_password"><br>
-                New password: <input type="password" name="new_password"><br>
-                Retype new password: <input type="password" name="new_password2"><br>
-                <button type="submit"> Update </button>
-            </form>
-
-            <h2> Delete account </h2>
-            <form action='/delete_user' method="post">
-                Password: <input type="password" name="password"><br>
-                <button type="submit"> Delete </button>
-            </form>
-
-            <h2> Log out </h2>
+        <div class="account">
             <form action='/logout' method="post">
                 <button type="submit"> Log out </button>
+            </form>
+            <form action='/manage_account' method="post">
+                <button type="submit"> Manage Account </button>
+            </form>
+        </div>        
+
+        <div class="update">
+            <h2> Update image </h2>
+
+            <form action='/update_image' method="post">
+                Name: <input type="text" name="img_name"><br>
+                Type: <input type="text" name="img_type"><br>
+                Size (MB): <input type="text" name="img_size"><br>
+                Dimension: <input type="text" name="img_dimension"><br>
+
+                Scope: <input type="radio" name="img_private2" id="img_private2"
+                        onclick='radar_handler2("private")'> Private
+                       <input type="radio" name="img_public2" id="img_public2"
+                        onclick='radar_handler2("public")'> Public <br>
+
+                <button type="submit"> Update </button>
             </form>
         </div>
 
@@ -97,7 +108,7 @@
             </div>
         </div>
         
-        <div class="image_operations">
+        <div class="create_delete">
             <h2> Create image </h2>
 
             <form action='/create_image' method="post">
@@ -106,8 +117,10 @@
                 Size (MB): <input type="text" name="img_size" placeholder="1"><br>
                 Dimension: <input type="text" name="img_dimension" placeholder="512x512"><br>
 
-                Scope: <input type="radio" name="img_private" id="img_private" onclick='radar_handler("private")' checked> Private
-                <input type="radio" name="img_public" id="img_public" onclick='radar_handler("public")'> Public <br>
+                Scope: <input type="radio" name="img_private" id="img_private"
+                        onclick='radar_handler("private")' checked> Private
+                       <input type="radio" name="img_public" id="img_public"
+                        onclick='radar_handler("public")'> Public <br>
 
                 <button type="submit"> Create </button>
             </form>
@@ -136,6 +149,20 @@
             else if (btn == "public"){
                 private_btn.checked = false; 
                 public_btn.checked = true; 
+            }
+        }
+
+        var private_btn2 = document.getElementById('img_private2');
+        var public_btn2 = document.getElementById('img_public2');
+
+        function radar_handler2(btn){
+            if (btn == "private"){
+                private_btn2.checked = true; 
+                public_btn2.checked = false; 
+            }
+            else if (btn == "public"){
+                private_btn2.checked = false; 
+                public_btn2.checked = true; 
             }
         }
     </script>

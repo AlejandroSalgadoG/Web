@@ -14,12 +14,15 @@ app.set('view engine', 'ejs');
 
 // Routes
 app.get('/', routes.home);
+app.get('/read_users', routes.read_users);
+
 app.post('/login', routes.login);
 app.post('/logout', routes.logout);
+app.post('/manage_account', routes.manage_account);
 app.post('/register', routes.registration);
 app.post('/delete_user', routes.delete_user);
 app.post('/update_password', routes.update_user);
-app.get('/read_users', routes.read_users);
+app.post('/update_image', routes.update_image);
 app.post('/search_public_images', routes.search_public_images);
 app.post('/search_private_images', routes.search_private_images);
 app.post('/search_shared_images', routes.search_shared_images);

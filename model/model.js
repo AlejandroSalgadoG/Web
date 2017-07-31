@@ -92,12 +92,27 @@ exports.search_user_image = function(user, img, callback_fun){
 }
 
 exports.delete_image = function(img, callback_fun){
-    var query_var = ' DELETE FROM images WHERE name="'+img+'";';
+    var query_var = 'DELETE FROM images WHERE name="'+img+'";';
     execute_query(query_var, callback_fun);
 }
 
 exports.delete_image_associations = function(user, img, callback_fun){
-    var query_var = ' DELETE FROM associations WHERE userid="'+user+'" AND imageid="'+img+'";';
+    var query_var = 'DELETE FROM associations WHERE userid="'+user+'" AND imageid="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.update_image = function(info, callback_fun){
+    var query_var = 'UPDATE images SET ';
+
+    query_var += 'name="'+info.name+'" ';
+
+    if (info.type != "") query_var += ', type="'+info.type+'" ';
+    if (info.size != "") query_var += ', size="'+info.size+'" ';
+    if (info.dimension != "") query_var += ', dimension="'+info.dimension+'" ';
+    if (info.scope != undefined) query_var += ', private="'+info.scope+'" ';
+
+    query_var += 'WHERE name="'+info.name+'";';
+    
     execute_query(query_var, callback_fun);
 }
 

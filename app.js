@@ -23,6 +23,7 @@ app.post('/register', routes.registration);
 app.post('/delete_user', routes.delete_user);
 app.post('/update_password', routes.update_user);
 app.post('/update_image', routes.update_image);
+app.post('/share_image', routes.share_image);
 app.post('/search_public_images', routes.search_public_images);
 app.post('/search_private_images', routes.search_private_images);
 app.post('/search_shared_images', routes.search_shared_images);

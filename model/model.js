@@ -66,7 +66,9 @@ exports.search_private_images = function(user, callback_fun){
 }
 
 exports.search_shared_images = function(user, callback_fun){
-    var query_var = 'SELECT * FROM associations WHERE owner="false" AND userid="'+user+'";';
+    var query_var = 'SELECT name,type,size,dimension \
+                     FROM images INNER JOIN associations ON name=imageid \
+                     WHERE owner="false" AND userid="'+user+'";';
     execute_query(query_var, callback_fun);
 }
 
@@ -83,11 +85,14 @@ exports.add_private_association = function(user, img, callback_fun){
 }
 
 exports.search_user_image = function(user, img, callback_fun){
-    //var query_var = 'SELECT  FROM associations WHERE userid="'+user+'" AND imageid="'+img+'" AND owner="true";';
-
     var query_var = 'SELECT name,type,size,dimension \
                      FROM images INNER JOIN associations ON name=imageid \
                      WHERE owner="true" AND userid="'+user+'" AND imageid="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.search_user = function(user, callback_fun){
+    var query_var = 'SELECT user FROM users WHERE user="'+user+'";';
     execute_query(query_var, callback_fun);
 }
 
@@ -113,6 +118,12 @@ exports.update_image = function(info, callback_fun){
 
     query_var += 'WHERE name="'+info.name+'";';
     
+    execute_query(query_var, callback_fun);
+}
+
+exports.share_image = function(user, img, callback_fun){
+    var query_var = 'INSERT INTO associations \
+                     VALUES ("'+user+'", "'+img+'", "false");';
     execute_query(query_var, callback_fun);
 }
 

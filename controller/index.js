@@ -22,9 +22,8 @@ exports.login = function(req, res){
 
             var true_pass = result[0].password;
 
-            if (pass == true_pass){ 
-                var age = 10 * 60 * 1000;
-                res.cookie('user', user, {maxAge: age});
+            if (pass == true_pass){
+                res.cookie('user', user);
                 res.render('logged', { user: user, search: {}, msg: "" });
             }
             else res.render('home', { msg: "Bad password" });
@@ -81,17 +80,62 @@ exports.delete_user = function(req, res){
 
             var true_pass = result[0].password;
 
-            if (pass == true_pass){
-                model.delete_user(user,
-                    function(err, result){
-                        if (err) res.render('account', { msg: err });
-                        else res.redirect('/'); //delete files
-                    }
-                );
+            if (pass != true_pass){
+                res.render('account', { msg: "Bad password" });
+                return;
             }
-            else res.render('account', { msg: "Bad password" });
+
+            model.search_user_images(user,
+                function(err, result){
+                    if (err){
+                        res.render('account', { msg: "error 1" });
+                        return;
+                    }
+
+                    for (var i=0;i<result.length;i++){
+                        image = result[i].name;
+
+                        if (result[i].owner == "true"){
+                            model.delete_all_image_associations(image,
+                                function(err, result){
+                                    if (err){
+                                        res.render('account', { msg: "error 2" });
+                                        return;
+                                    }
+                                    
+                                    model.delete_image(image,
+                                        function(err, result){
+                                            if (err){
+                                                res.render('account', { msg: "error 3" });
+                                                return;
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                        else{
+                            model.delete_image_association(user, image,
+                                function(err, result){
+                                    if (err){
+                                        res.render('account', { msg: "error 4" });
+                                        return;
+                                    }
+                                }
+                            );
+                        }
+                    }
+
+                    model.delete_user(user,
+                        function(err, result){
+                            if (err) res.render('account', { msg: "error 5" });
+                            else res.redirect('/');
+                        }
+                    );
+                }
+            );
         }
-    );   
+    );
 }
 
 exports.update_user = function(req, res){
@@ -156,12 +200,21 @@ exports.share_image = function(req, res){
                         return;
                     }
 
-                    model.share_image(user_share, image,
-                        function(err, result){
-                            if (err) res.render('logged', { user: user, search: {}, msg: err });
-                            else res.render('logged', { user: user, search: {}, msg: "image shared" });
-                        }
-                    );
+                    if (req.body.share != undefined){
+                        model.share_image(user_share, image,
+                            function(err, result){
+                                if (err) res.render('logged', { user: user, search: {}, msg: err });
+                                else res.render('logged', { user: user, search: {}, msg: "image shared" });
+                            }
+                        );
+                    }else{
+                        model.delete_image_association(user_share, image,
+                            function(err, result){
+                                if (err) res.render('logged', { user: user, search: {}, msg: err });
+                                else res.render('logged', { user: user, search: {}, msg: "image unshared" });
+                            }
+                        );
+                    }
                 }
             );
         }
@@ -202,19 +255,11 @@ exports.search_user_images = function(req, res){
     var user = req.cookies.user;
     var image = req.body.img_search;
 
-    model.search_user_image(user, image,
+    model.search_like_user_images(user, image,
         function(err, result){
-            if (err){
-                res.render('logged', { user: user, search: {}, msg: err });
-                return;
-            }
-
-            if (result.length == 0){
-                res.render('logged', { user: user, search: {}, msg: "Bad image" });
-                return;
-            }
-
-            res.render('logged', { user: user, search : result, msg: "" } );
+            if (err) res.render('logged', { user: user, search: {}, msg: err });
+            else if (result.length == 0) res.render('logged', { user: user, search: {}, msg: "Bad image" });
+            else res.render('logged', { user: user, search : result, msg: "" } );
         }
     );
 }
@@ -229,7 +274,7 @@ exports.create_image = function(req, res){
                  type: req.body.img_type,
                  size: req.body.img_size,
                  dimension: req.body.img_dimension,
-                 scope: img_scope }; 
+                 scope: img_scope };
 
     model.create_image(img_info,
         function(err, result){
@@ -264,24 +309,27 @@ exports.delete_image = function(req, res){
             if (result[0].owner == "true"){
                 model.delete_all_image_associations(image,
                     function(err, result){
-                        if (err) res.render('logged', { user: user, search: {}, msg: err });
+                        if (err){
+                            res.render('logged', { user: user, search: {}, msg: err });
+                            return;
+                        }
+
+                        model.delete_image(image,
+                            function(err, result){
+                                if (err) res.render('logged', { user: user, search: {}, msg: err });
+                                else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
+                            }
+                        );
                     }
                 );
-
-                model.delete_image(image,
-                    function(err, result){
-                        if (err) res.render('logged', { user: user, search: {}, msg: err });
-                        else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
-                    }
-                ); 
             }
             else{
-                model.delete_image_associations(user, image,
+                model.delete_image_association(user, image,
                     function(err, result){
                         if (err) res.render('logged', { user: user, search: {}, msg: err });
                         else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
                     }
-                ); 
+                );
             }
         }
     );
@@ -298,7 +346,7 @@ exports.update_image = function(req, res){
                      type: req.body.img_type,
                      size: req.body.img_size,
                      dimension: req.body.img_dimension,
-                     scope: img_scope }; 
+                     scope: img_scope };
 
     model.update_image(img_info,
         function(err, result){

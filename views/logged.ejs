@@ -51,7 +51,7 @@
             <h2> Update image </h2>
 
             <form action='/update_image' method="post">
-                Name: <input type="text" name="img_name"><br>
+                Name: <input type="text" name="img_name" required><br>
                 Type: <input type="text" name="img_type"><br>
                 Size (MB): <input type="text" name="img_size"><br>
                 Dimension: <input type="text" name="img_dimension"><br>
@@ -69,7 +69,8 @@
             <form action='/share_image' method="post">
                 User: <input type="text" name="img_user_share"><br>
                 Image: <input type="text" name="img_name_share"><br>
-                <button type="submit"> Share </button>
+                <button type="submit" name="share"> Share </button>
+                <button type="submit" name="unshare"> Unshare </button>
             </form>
 
         </div>
@@ -79,7 +80,7 @@
                 <h2> Search images </h2>
 
                 <form action='/search_user_images' method="post">
-                    <input type="text" name="img_search">
+                    <input type="text" name="img_search" required>
                     <button type="submit"> Search </button> 
                 </form>
                 
@@ -121,10 +122,10 @@
             <h2> Create image </h2>
 
             <form action='/create_image' method="post">
-                Name: <input type="text" name="img_name" placeholder="img1"><br>
-                Type: <input type="text" name="img_type" placeholder="jpg"><br>
-                Size (MB): <input type="text" name="img_size" placeholder="1"><br>
-                Dimension: <input type="text" name="img_dimension" placeholder="512x512"><br>
+                Name: <input type="text" name="img_name" placeholder="img1" required><br>
+                Type: <input type="text" name="img_type" placeholder="jpg" required><br>
+                Size (MB): <input type="text" name="img_size" placeholder="1" required><br>
+                Dimension: <input type="text" name="img_dimension" placeholder="512x512" required><br>
 
                 Scope: <input type="radio" name="img_private" id="img_private"
                         onclick='radar_handler("private")' checked> Private

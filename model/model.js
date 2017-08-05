@@ -85,9 +85,23 @@ exports.add_private_association = function(user, img, callback_fun){
 }
 
 exports.search_user_image = function(user, img, callback_fun){
-    var query_var = 'SELECT * \
-                     FROM images INNER JOIN associations ON name=imageid \
+    var query_var = 'SELECT * FROM images \
+                     INNER JOIN associations ON name=imageid \
                      WHERE userid="'+user+'" AND imageid="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.search_user_images = function(user, callback_fun){
+    var query_var = 'SELECT * FROM images \
+                     INNER JOIN associations ON name=imageid \
+                     WHERE userid="'+user+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.search_like_user_images = function(user, img, callback_fun){
+    var query_var = 'SELECT * FROM images \
+                     INNER JOIN associations ON name=imageid \
+                     WHERE (userid="'+user+'" or private="false") AND imageid LIKE "%'+img+'%";';
     execute_query(query_var, callback_fun);
 }
 
@@ -101,7 +115,7 @@ exports.delete_image = function(img, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
-exports.delete_image_associations = function(user, img, callback_fun){
+exports.delete_image_association = function(user, img, callback_fun){
     var query_var = 'DELETE FROM associations WHERE userid="'+user+'" AND imageid="'+img+'";';
     execute_query(query_var, callback_fun);
 }
@@ -122,7 +136,7 @@ exports.update_image = function(info, callback_fun){
     if (info.scope != undefined) query_var += ', private="'+info.scope+'" ';
 
     query_var += 'WHERE name="'+info.name+'";';
-    
+
     execute_query(query_var, callback_fun);
 }
 

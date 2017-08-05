@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var routes = require('./controller');
-var helper = require('./app_helper');
+var model = require('./model/model');
 
 var app = express();
 
@@ -31,8 +31,17 @@ app.post('/search_user_images', routes.search_user_images);
 app.post('/create_image', routes.create_image);
 app.post('/delete_image', routes.delete_image);
 
-var server = app.listen(3000, helper.start_fun);
-function cleanup(){ server.close( helper.end_fun ); }
+var start_fun = function(){
+    model.connect_db();
+};
+
+var end_fun = function(){
+    model.disconnect_db();
+    process.exit();
+};
+
+var server = app.listen(3000, start_fun);
+function cleanup(){ server.close( end_fun ); }
 
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);

@@ -129,7 +129,10 @@ exports.delete_user = function(req, res){
                     model.delete_user(user,
                         function(err, result){
                             if (err) res.render('account', { msg: "error 5" });
-                            else res.redirect('/');
+                            else{
+                                res.clearCookie('user');
+                                res.redirect('/');
+                            }
                         }
                     );
                 }
@@ -276,16 +279,33 @@ exports.create_image = function(req, res){
                  dimension: req.body.img_dimension,
                  scope: img_scope };
 
-    model.create_image(img_info,
+    model.search_user_image(user, img_info.name,
         function(err, result){
-            if (err) res.render('logged', { user: user, search: {}, msg: err });
-        }
-    );
+            if (err){
+                res.render('logged', { user: user, search: {}, msg: err });
+                return;
+            }
 
-    model.add_private_association(user, img_info.name,
-        function(err, result){
-            if (err) res.render('logged', { user: user, search: {}, msg: err });
-            else res.render('logged', { user: user, search: {}, msg: "image created" });
+            if (result.length == 0){
+                res.render('logged', { user: user, search: {}, msg: "Bad image" });
+                return;
+            }
+
+            model.create_image(img_info,
+                function(err, result){
+                    if (err){
+                        res.render('logged', { user: user, search: {}, msg: err });
+                        return;
+                    }
+
+                    model.add_private_association(user, img_info.name,
+                        function(err, result){
+                            if (err) res.render('logged', { user: user, search: {}, msg: err });
+                            else res.render('logged', { user: user, search: {}, msg: "image created" });
+                        }
+                    );
+                }
+            );
         }
     );
 }
@@ -348,10 +368,24 @@ exports.update_image = function(req, res){
                      dimension: req.body.img_dimension,
                      scope: img_scope };
 
-    model.update_image(img_info,
+    model.search_user_image(user, img_info.name,
         function(err, result){
-            if (err) res.render('logged', { user: user, search: {}, msg: err });
-            else res.render('logged', { user: user, search: {}, msg: "Image updated" });
+            if (err){
+                res.render('logged', { user: user, search: {}, msg: err });
+                return;
+            }
+
+            if (result.length == 0){
+                res.render('logged', { user: user, search: {}, msg: "Bad image" });
+                return;
+            }
+
+            model.update_image(img_info,
+                function(err, result){
+                    if (err) res.render('logged', { user: user, search: {}, msg: err });
+                    else res.render('logged', { user: user, search: {}, msg: "Image updated" });
+                }
+            );
         }
     );
 }

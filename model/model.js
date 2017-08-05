@@ -106,6 +106,11 @@ exports.delete_image_associations = function(user, img, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
+exports.delete_all_image_associations = function(img, callback_fun){
+    var query_var = 'DELETE FROM associations WHERE imageid="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
 exports.update_image = function(info, callback_fun){
     var query_var = 'UPDATE images SET ';
 

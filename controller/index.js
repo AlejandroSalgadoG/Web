@@ -261,27 +261,28 @@ exports.delete_image = function(req, res){
                 return;
             }
 
-            model.delete_image_associations(user, image,
-                function(err, result){
-                    if (err){
-                        res.render('logged', { user: user, search: {}, msg: err });
-                        return;
+            if (result[0].owner == "true"){
+                model.delete_all_image_associations(image,
+                    function(err, result){
+                        if (err) res.render('logged', { user: user, search: {}, msg: err });
                     }
-                }
-            ); 
+                );
 
-            if (result[0].owner == true){
                 model.delete_image(image,
                     function(err, result){
-                        if (err){
-                            res.render('logged', { user: user, search: {}, msg: err });
-                            return;
-                        }
+                        if (err) res.render('logged', { user: user, search: {}, msg: err });
+                        else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
                     }
                 ); 
             }
-
-            res.render('logged', { user: user, search: {}, msg: "Image deleted" });
+            else{
+                model.delete_image_associations(user, image,
+                    function(err, result){
+                        if (err) res.render('logged', { user: user, search: {}, msg: err });
+                        else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
+                    }
+                ); 
+            }
         }
     );
 }

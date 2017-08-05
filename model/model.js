@@ -24,7 +24,6 @@ function execute_query(query_var, callback_fun){
 }
 
 exports.connect_db = function(){
-    console.log("The application will connect to the database");
     connection.connect(error_fun);
 }
 
@@ -147,7 +146,5 @@ exports.share_image = function(user, img, callback_fun){
 }
 
 exports.disconnect_db = function(){
-    console.log("The application will disconnect from the database");
     connection.end(error_fun);
-    console.log('Good bye');
 }

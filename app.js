@@ -32,11 +32,14 @@ app.post('/create_image', routes.create_image);
 app.post('/delete_image', routes.delete_image);
 
 var start_fun = function(){
+    console.log("The application will connect to the database");
     model.connect_db();
 };
 
 var end_fun = function(){
+    console.log("The application will disconnect from the database");
     model.disconnect_db();
+    console.log('Good bye');
     process.exit();
 };
 

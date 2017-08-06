@@ -37,7 +37,8 @@ exports.logout = function(req, res){
 }
 
 exports.manage_account = function(req, res){
-    res.render('account', { msg: "" });
+    if (req.cookies.user == undefined) res.render('error');
+    else res.render('account', { msg: "" });
 }
 
 exports.registration = function(req, res){
@@ -102,7 +103,7 @@ exports.delete_user = function(req, res){
                                         res.render('account', { msg: "error 2" });
                                         return;
                                     }
-                                    
+
                                     model.delete_image(image,
                                         function(err, result){
                                             if (err){
@@ -225,6 +226,11 @@ exports.share_image = function(req, res){
 }
 
 exports.search_public_images = function(req, res){
+    if (req.cookies.user == undefined){
+        res.render('error');
+        return;
+    }
+
     var user = req.cookies.user;
     model.search_public_images(
         function(err, result){
@@ -235,6 +241,11 @@ exports.search_public_images = function(req, res){
 }
 
 exports.search_private_images = function(req, res){
+    if (req.cookies.user == undefined){
+        res.render('error');
+        return;
+    }
+
     var user = req.cookies.user;
     model.search_private_images(user,
         function(err, result){
@@ -245,6 +256,11 @@ exports.search_private_images = function(req, res){
 }
 
 exports.search_shared_images = function(req, res){
+    if (req.cookies.user == undefined){
+        res.render('error');
+        return;
+    }
+
     var user = req.cookies.user;
     model.search_shared_images(user,
         function(err, result){
@@ -255,8 +271,13 @@ exports.search_shared_images = function(req, res){
 }
 
 exports.search_user_images = function(req, res){
+    if (req.cookies.user == undefined){
+        res.render('error');
+        return;
+    }
+
     var user = req.cookies.user;
-    var image = req.body.img_search;
+    var image = req.query.img_search;
 
     model.search_like_user_images(user, image,
         function(err, result){

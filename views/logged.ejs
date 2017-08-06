@@ -39,10 +39,10 @@
         <h1> Welcome <%= user %> </h1>
 
         <div class="account">
-            <form action='/logout' method="post">
+            <form action='/logout' method="get">
                 <button type="submit"> Log out </button>
             </form>
-            <form action='/manage_account' method="post">
+            <form action='/manage_account' method="get">
                 <button type="submit"> Manage Account </button>
             </form>
         </div>        
@@ -79,20 +79,20 @@
             <div class="search_buttons">
                 <h2> Search images </h2>
 
-                <form action='/search_user_images' method="post">
+                <form action='/search_user_images' method="get">
                     <input type="text" name="img_search" required>
                     <button type="submit"> Search </button> 
                 </form>
                 
                 <br>
 
-                <form action='/search_public_images' method="post">
+                <form action='/search_public_images' method="get">
                     <button type="submit"> Public </button>
                 </form>
-                <form action='/search_private_images' method="post">
+                <form action='/search_private_images' method="get">
                     <button type="submit"> My images </button>
                 </form>
-                <form action='/search_shared_images' method="post">
+                <form action='/search_shared_images' method="get">
                     <button type="submit"> Shared </button>
                 </form>
             </div>

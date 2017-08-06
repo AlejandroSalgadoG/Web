@@ -5,7 +5,6 @@ var info = {
     user: 'alejandro',
     password: 'jaja19',
     database: 'image_manager',
-    port: '/var/run/mysqld/mysqld.sock'
 }
 
 var connection = mysql.createConnection(info);

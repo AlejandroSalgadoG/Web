@@ -26,12 +26,10 @@ app.post('/login', routes.login);
 app.post('/register', routes.registration);
 app.post('/delete_user', routes.delete_user);
 app.post('/update_password', routes.update_user);
+app.post('/create_image', routes.create_image);
 app.post('/update_image', routes.update_image);
 app.post('/share_image', routes.share_image);
-app.post('/create_image', routes.create_image);
 app.post('/delete_image', routes.delete_image);
-
-
 
 var start_fun = function(){
     console.log("The application will connect to the database");

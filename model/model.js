@@ -82,6 +82,11 @@ exports.add_private_association = function(user, img, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
+exports.search_image = function(img, callback_fun){
+    var query_var = 'SELECT * FROM images WHERE name="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
 exports.search_user_image = function(user, img, callback_fun){
     var query_var = 'SELECT * FROM images \
                      INNER JOIN associations ON name=imageid \

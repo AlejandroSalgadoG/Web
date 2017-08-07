@@ -300,15 +300,15 @@ exports.create_image = function(req, res){
                  dimension: req.body.img_dimension,
                  scope: img_scope };
 
-    model.search_user_image(user, img_info.name,
+    model.search_image(img_info.name,
         function(err, result){
             if (err){
                 res.render('logged', { user: user, search: {}, msg: err });
                 return;
             }
 
-            if (result.length == 0){
-                res.render('logged', { user: user, search: {}, msg: "Bad image" });
+            if (result.length != 0){
+                res.render('logged', { user: user, search: {}, msg: "The image already exists" });
                 return;
             }
 

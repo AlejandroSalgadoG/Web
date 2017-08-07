@@ -50,6 +50,8 @@
         <div class="update">
             <h2> Update image </h2>
 
+            <p> Only need to fill the values that you want to update </p>
+
             <form action='/update_image' method="post">
                 Name: <input type="text" name="img_name" required><br>
                 Type: <input type="text" name="img_type"><br>
@@ -142,9 +144,9 @@
                 <button type="submit"> delete </button>
             </form>
 
+            <%= msg %>
         </div>
 
-        <%= msg %>
     </body>
 
     <script>

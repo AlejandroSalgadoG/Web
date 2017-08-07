@@ -16,6 +16,11 @@ Aplicación web que permite gestionar imagenes con un simple CRUD de usuarios y 
 4. Listar las difentes imagenes
 5. Compartir y publicar imagenes
 
+Nota: debido a que esta implementacion solo es una primera version algunos errores,
+como el duplicar campos de la base de datos, despues de ser debidamente manejados 
+por el servidor, son informados al usuario mostrando el error generado en sintaxis
+sql en la seccion de mensajes de la aplicacion.
+
 ## 1.2 Definición de tecnología de desarrollo y despliegue para la aplicación:
 
 * Lenguaje de Programación: Javascript
@@ -215,8 +220,7 @@ Nota: el usuario es mantenido por una cookie la cual es creada por el metodo *lo
 es exitosa y es destruida por el metodo *logout*, es por esta razon que no se necesita la informacion del usuario
 de manera explicita.
 
-# 4. Despliegue en un Servidor Centos 7.x
-
+# 4. Despliegue en un Servidor Centos 7.x y digital ocean
 
 ## Instalacion de nodejs en el servidor
 
@@ -237,23 +241,33 @@ de manera explicita.
     $ sudo systemctl enable httpd
     $ sudo vim /etc/httpd/conf.d/inv_proxy.conf  # archivo para la configuracion del proxy inverso
 
-Agregar la configuracion de proxy inverso :
+Agregar la configuracion de proxy inverso para el dca:
 
     <VirtualHost *:80>
         ProxyPreserveHost On
 
-        ProxyPass /image_manager http://127.0.0.1:3000
-        ProxyPassReverse /image_manager http://127.0.0.1:3000
+        ProxyPass /image_manager http://127.0.0.1:3000/
+        ProxyPassReverse /image_manager http://127.0.0.1:3000/
     </VirtualHost>
 
 Nota: como resultado de esta configuracion a las rutas de los fomularios en la vista
 se les debe agregar la ruta /image_manger al principio de las uri para que sean bien
 redirigidas por el servidor web.
 
+Agregar la configuracion de proxy inverso para el servidor digital ocean:
+
+    <VirtualHost *:80>
+        ProxyPreserveHost On
+
+        ProxyPass / http://127.0.0.1:3000/
+        ProxyPassReverse / http://127.0.0.1:3000/
+    </VirtualHost>
+
 ## Configuracion de puertos
 
-    $ firewall-cmd --zone=public --add-port=3000/tcp --permanent
-    $ firewall-cmd --reload
+    $ sudo firewall-cmd --zone=public --add-service=http --permanent
+    $ sudo firewall-cmd --zone=public --add-port=3000/tcp --permanent
+    $ sudo firewall-cmd --reload
 
 
 ## Configurar la aplicacion

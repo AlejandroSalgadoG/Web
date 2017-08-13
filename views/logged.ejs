@@ -1,181 +1,172 @@
 <html>
-    <style>
-        .account form{
-            float: right;
-            display: inline-block;
-        }
 
-        .update {
-            width: 33%;
-            float: left;
-        }
+    <head>
+        <link rel="stylesheet" href="/styles/logged.css">
 
-        .search {
-            width: 33%;
-            float: left;
-        }
-
-        .search_buttons form{
-            display: inline-block;
-        }
-
-        .display{
-            height: 50%; 
-            width: 85%;
-            overflow-y:scroll;
-        }
-
-        th{
-            border: 1px solid black;
-        }
-
-        .create_delete {
-            width: 33%;
-            float: left;
-        }
-    </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    </head>
 
     <body>
-        <h1> Welcome <%= user %> </h1>
-
-        <div class="account">
-            <form action='/logout' method="get">
-                <button type="submit"> Log out </button>
-            </form>
-            <form action='/manage_account' method="get">
-                <button type="submit"> Manage Account </button>
-            </form>
-        </div>        
-
-        <div class="update">
-            <h2> Update image </h2>
-
-            <p> Only need to fill the values that you want to update </p>
-
-            <form action='/update_image' method="post">
-                Name: <input type="text" name="img_name" required><br>
-                Type: <input type="text" name="img_type"><br>
-                Size (MB): <input type="text" name="img_size"><br>
-                Dimension: <input type="text" name="img_dimension"><br>
-
-                Scope: <input type="radio" name="img_private2" id="img_private2"
-                        onclick='radar_handler2("private")'> Private
-                       <input type="radio" name="img_public2" id="img_public2"
-                        onclick='radar_handler2("public")'> Public <br>
-
-                <button type="submit"> Update </button>
-            </form>
-
-            <h2> Share/Unshare image </h2>
-
-            <form action='/share_image' method="post">
-                User: <input type="text" name="img_user_share"><br>
-                Image: <input type="text" name="img_name_share"><br>
-                <button type="submit" name="share"> Share </button>
-                <button type="submit" name="unshare"> Unshare </button>
-            </form>
-
-        </div>
-
-        <div class="search">
-            <div class="search_buttons">
-                <h2> Search images </h2>
-
-                <form action='/search_user_images' method="get">
-                    <input type="text" name="img_search" required>
-                    <button type="submit"> Search </button> 
-                </form>
-                
-                <br>
-
-                <form action='/search_public_images' method="get">
-                    <button type="submit"> Public </button>
-                </form>
-                <form action='/search_private_images' method="get">
-                    <button type="submit"> My images </button>
-                </form>
-                <form action='/search_shared_images' method="get">
-                    <button type="submit"> Shared </button>
-                </form>
-            </div>
-
-            <div class="display"> 
-                <table>
-                    <tr>
-                        <th> Name </th>
-                        <th> Type </th>
-                        <th> Size </th>
-                        <th> Dimension </th>
-                    </tr>
-
-                    <% for(var i=0; i<search.length; i++){ %>
-                        <tr>
-                            <th> <%= search[i].name %> </th>
-                            <th> <%= search[i].type %> </th>
-                            <th> <%= search[i].size %> </th>
-                            <th> <%= search[i].dimension %> </th>
-                        </tr>
-                    <% } %>
-                </table>
+    <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-lg-11">
+                    <form class="form-inline" action='/manage_account' method="get">
+                        <button class="btn btn-primary" type="submit"> Manage Account </button>
+                    </form>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-1">
+                    <form class="form-inline" action='/logout' method="get">
+                        <button class="btn btn-primary full" type="submit"> Log out </button>
+                    </form>
+                </div>
             </div>
         </div>
-        
-        <div class="create_delete">
-            <h2> Create image </h2>
+    </div>
 
-            <form action='/create_image' method="post">
-                Name: <input type="text" name="img_name" placeholder="img1" required><br>
-                Type: <input type="text" name="img_type" placeholder="jpg" required><br>
-                Size (MB): <input type="text" name="img_size" placeholder="1" required><br>
-                Dimension: <input type="text" name="img_dimension" placeholder="512x512" required><br>
+        <br>
+        <div class="text-center">
+            <h1> Welcome <%= user %> </h1>
+        </div>
+        <br>
 
-                Scope: <input type="radio" name="img_private" id="img_private"
-                        onclick='radar_handler("private")' checked> Private
-                       <input type="radio" name="img_public" id="img_public"
-                        onclick='radar_handler("public")'> Public <br>
+        <div class="container">
+            <div class="row spacing">
+                <div class="col-md-4 delimiting">
+                    <h2>Create image</h2>
 
-                <button type="submit"> Create </button>
-            </form>
+                    <form action='/create_image' method="post">
+                        <label>Name: </label>
+                        <input class="form-control" type="text" name="img_name" placeholder="img1" required><br>
+                        <label>Type: </label>
+                        <input class="form-control" type="text" name="img_type" placeholder="jpg" required><br>
+                        <label>Size (MB): </label>
+                        <input class="form-control" type="text" name="img_size" placeholder="1" required><br>
+                        <label>Dimension: </label>
+                        <input class="form-control" type="text" name="img_dimension" placeholder="512x512" required><br>
 
-            <h2> Delete image </h2>
+                        <label>Scope: </label>
+                        <input type="radio" name="img_private" id="img_private"
+                                      onclick='radar_handler("private")' checked> Private
+                        <input type="radio" name="img_public" id="img_public"
+                               onclick='radar_handler("public")'> Public <br>
 
-            <form action='/delete_image' method="post">
-                Name: <input type="text" name="del_img_name" placeholder="img1"><br>
-                <button type="submit"> delete </button>
-            </form>
+                        <button class="btn btn-primary" type="submit"> Create </button>
+                    </form>
+                </div>
 
-            <%= msg %>
+                <div class="col-md-4">
+                    <h2> Delete image </h2>
+
+                    <form action='/delete_image' method="post">
+                        <label>Name: </label>
+                        <input class="form-control" type="text" name="del_img_name" placeholder="img1"><br>
+                        <button class="btn btn-primary" type="submit"> Delete </button>
+                    </form>
+
+                    <%= msg %>
+                </div>
+
+                <div class="col-md-4 delimiting">
+                    <h2> Update image </h2>
+
+                    <p> Only need to fill the values that you want to update: </p>
+
+                    <form action='/update_image' method="post">
+                        <label>Name: </label>
+                        <input class="form-control" type="text" name="img_name" required><br>
+                        <label>Type: </label>
+                        <input class="form-control" type="text" name="img_type"><br>
+                        <label>Size (MB): </label>
+                        <input class="form-control" type="text" name="img_size"><br>
+                        <label>Dimension: </label>
+                        <input class="form-control" type="text" name="img_dimension"><br>
+                        <label>Scope: </label>
+                        <input type="radio" name="img_private2" id="img_private2"
+                                      onclick='radar_handler2("private")'> Private
+                        <input type="radio" name="img_public2" id="img_public2"
+                               onclick='radar_handler2("public")'> Public <br>
+
+                        <button class="btn btn-primary" type="submit"> Update </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h2> Share/Unshare image </h2>
+
+                    <form action='/share_image' method="post">
+                        <label>User: </label>
+                        <input class="form-control" type="text" name="img_user_share"><br>
+                        <label>Image: </label>
+                        <input class="form-control" type="text" name="img_name_share"><br>
+                        <button class="btn btn-primary" type="submit" name="share"> Share </button>
+                        <button class="btn btn-primary" type="submit" name="unshare"> Unshare </button>
+                    </form>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div>
+                        <h2>Search images</h2>
+
+                        <form action='/search_user_images' method="get">
+                            <input class="form-control" type="text" name="img_search" required>
+                            <br>
+                            <button class="btn btn-primary" type="submit"> Search </button>
+                        </form>
+
+                        <br>
+                        <div class="row">
+                            <div class="col-2">
+                                <form class="form-inline" action='/search_public_images' method="get">
+                                    <button class="btn btn-outline-primary" type="submit"> Public </button>
+                                </form>
+                            </div>
+                            <div class="col-2">
+                                <form class="form-inline" action='/search_shared_images' method="get">
+                                    <button class="btn btn-outline-primary" type="submit"> Shared </button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <form class="form-inline" action='/search_private_images' method="get">
+                                    <button class="btn btn-outline-primary" type="submit"> My images </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <table class="table">
+                            <tr>
+                                <th> Name </th>
+                                <th> Type </th>
+                                <th> Size </th>
+                                <th> Dimension </th>
+                            </tr>
+
+                            <% for(var i=0; i<search.length; i++){ %>
+                            <tr>
+                                <th> <%= search[i].name %> </th>
+                                <th> <%= search[i].type %> </th>
+                                <th> <%= search[i].size %> </th>
+                                <th> <%= search[i].dimension %> </th>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </body>
 
-    <script>
-        var private_btn = document.getElementById('img_private');
-        var public_btn = document.getElementById('img_public');
-
-        function radar_handler(btn){
-            if (btn == "private"){
-                private_btn.checked = true; 
-                public_btn.checked = false; 
-            }
-            else if (btn == "public"){
-                private_btn.checked = false; 
-                public_btn.checked = true; 
-            }
-        }
-
-        var private_btn2 = document.getElementById('img_private2');
-        var public_btn2 = document.getElementById('img_public2');
-
-        function radar_handler2(btn){
-            if (btn == "private"){
-                private_btn2.checked = true; 
-                public_btn2.checked = false; 
-            }
-            else if (btn == "public"){
-                private_btn2.checked = false; 
-                public_btn2.checked = true; 
-            }
-        }
-    </script>
+    <script type="text/javascript" src="/scripts/logged.js"></script>
 </html>

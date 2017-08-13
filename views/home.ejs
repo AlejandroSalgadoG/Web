@@ -1,31 +1,65 @@
 <html>
+
     <head>
         <title>Image manager</title>
+
+        <link rel="stylesheet" type="text/css" href="/styles/home.css">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     </head>
+
     <body>
+    <div class="text-center">
         <h1> Welcome to image_manager </h1>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Log in</h3>
+                <form action='/login' method="post">
+                    <div class="form-group">
+                        <label>User: </label>
+                        <input class="form-control" type="text" name="user"><br>
+                        <label>Password: </label>
+                        <input class="form-control" type="password" name="password"><br>
+                    </div>
 
-        <h2> Log in </h2>
-        <form action='/login' method="post">
-            User: <input type="text" name="user"><br>
-            Password: <input type="password" name="password"><br>
+                    <button class="btn btn-primary" type="submit">Enter</button>
+                </form>
+            </div>
 
-            <button type="submit"> Enter </button>
-        </form>
+            <div class="col-md-6">
+                <h3>Register</h3>
 
-        <h2> Register </h2>
-        <form action='/register' method="post">
-            User: <input type="text" name="ruser"><br>
-            Password: <input type="password" name="rpassword"><br>
-            Retype Password: <input type="password" name="rpassword2"><br>
+                <form action='/register' method="post">
+                    <div class="form-group">
+                        <label>User: </label>
+                        <input class="form-control" type="text" name="ruser"><br>
+                        <label>Password: </label>
+                        <input class="form-control" type="password" name="rpassword"><br>
+                        <label>Retype Password: </label>
+                        <input class="form-control" type="password" name="rpassword2"><br>
+                    </div>
 
-            <button type="submit"> Register </button>
-        </form>
+                    <button class="btn btn-primary" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <hr>
+
+    <div class="container">
         <h2> Consult existing users </h2>
+        <br>
         <form action='/read_users'>
-            <button type="submit"> Consult </button>
+            <button class="btn btn-outline-primary" type="submit"> Consult </button>
         </form>
+    </div>
 
         <%= msg %>
     </body>

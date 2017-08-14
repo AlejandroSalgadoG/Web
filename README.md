@@ -1,7 +1,7 @@
 # image_manager
 
 * Luis Alfredo Gallego Montoya - lgalle17@eafit.educo
-* Jose Luis Alvares Herrera - jalvar53@eafit.educo
+* Jose Luis Alvarez Herrera - jalvar53@eafit.educo
 * Alejandro Salgado Gomez - asalgad2@eafit.educo
 
 # Descripción de aplicación
@@ -19,7 +19,7 @@ Aplicación web que permite gestionar imagenes con un simple CRUD de usuarios y 
 5. Compartir y publicar imagenes
 
 Nota: debido a que esta implementacion solo es una primera version algunos errores,
-como el duplicar campos de la base de datos, despues de ser debidamente manejados 
+como el duplicar campos de la base de datos, despues de ser debidamente manejados
 por el servidor, son informados al usuario mostrando el error generado en sintaxis
 sql en la seccion de mensajes de la aplicacion.
 
@@ -93,43 +93,43 @@ Servicio Web: Cierra una sesion de usuario
 - Método: GET
 - URI: /logout
 
-- - - 
+- - -
 
 Servicio Web: Consulta los usuarios existentes en la base de datos
 - Método: GET
 - URI: /read_users
 
-- - - 
+- - -
 
 Servicio Web: Acede a la pagina de manejo de cuenta para modificar informacion de un usuario
 - Método: GET
 - URI: /manage_account
 
-- - - 
+- - -
 
 Servicio Web: Busca las images publicas de la aplicacion
 - Método: GET
 - URI: /search_public_images
 
-- - - 
+- - -
 
 Servicio Web: Busca las images de un usuario
 - Método: GET
 - URI: /search_private_images
 
-- - - 
+- - -
 
 Servicio Web: Busca las images compartidas con un usuario
 - Método: GET
 - URI: /search_shared_images
 
-- - - 
+- - -
 
 Servicio Web: Busca las images de un usuario cuyo nombre contenga la substring de busqueda
 - Método: GET
 - URI: /search_user_images?img_serch=val
 
-- - - 
+- - -
 
 Servicio Web: Autentica al usuario contra la base de datos
 - metodo: POST
@@ -139,7 +139,7 @@ __Datos__:
 - user
 - password
 
-- - - 
+- - -
 
 Servicio Web: Registra a un usuario en la base de datos
 - metodo: POST
@@ -150,7 +150,7 @@ __Datos__:
 - rpassword
 - rpassword2
 
-- - - 
+- - -
 
 Servicio Web: Borra a un usuario y todos sus archivos de la base de datos
 - metodo: POST
@@ -159,7 +159,7 @@ Servicio Web: Borra a un usuario y todos sus archivos de la base de datos
 __Datos__:
 - password
 
-- - - 
+- - -
 
 Servicio Web: Actualiza el campo password de un usuario en la base de datos
 - metodo: POST
@@ -170,7 +170,7 @@ __Datos__:
 - new_password
 - new_password2
 
-- - - 
+- - -
 
 Servicio Web: Crea una imagen a nombre de un usuario especifico
 - metodo: POST
@@ -183,7 +183,7 @@ __Datos__:
 - dimension
 - scope (especifica si la imagen es publica o privada)
 
-- - - 
+- - -
 
 Servicio Web: Actualiza los datos de la imagen de un usuario en la base de datos
 - metodo: POST
@@ -196,7 +196,7 @@ __Datos__:
 - dimension
 - scope (especifica si la imagen es publica o privada)
 
-- - - 
+- - -
 
 Servicio Web: Comparte o restringe el acceso a una imagen de un usuario
 - metodo: POST
@@ -207,7 +207,7 @@ __Datos__:
 - img_name_share
 - share (especifica si la accion es de compartir o restringir)
 
-- - - 
+- - -
 
 Servicio Web: Borra la imagen de un usuario de la base de datos
 - metodo: POST
@@ -216,7 +216,7 @@ Servicio Web: Borra la imagen de un usuario de la base de datos
 __Datos__:
 - del_img_name
 
-- - - 
+- - -
 
 Nota: el usuario es mantenido por una cookie la cual es creada por el metodo *login* cuando la autenticacion
 es exitosa y es destruida por el metodo *logout*, es por esta razon que no se necesita la informacion del usuario
@@ -290,3 +290,42 @@ Agregar la configuracion de proxy inverso para el servidor digital ocean:
 ---
 
 # Proyecto 2
+
+## Definición del Equipo, proyecto y aplicación
+
+### Miembros del equipo y asignación:
+
+* QA1:    Disponibilidad   Estudiante:    Alejandro Salgado
+* QA2:    Rendimiento      Estudiante:    Luis Alfredo Gallego
+* QA3:    Seguridad        Estudiante:    Jose Luis Alvarez
+
+### Selección de aplicación:
+
+Se trabajará sobre _“Image manager”_ aplicación desarrollada en el proyecto 1
+por Alejandro Salgado.
+
+### Descripción de la aplicación
+
+Aplicación web de gestión de imágenes la cual soporta bases de datos que
+permiten la creación y manejo de perfiles de usuario al igual que creación y
+manejo de archivos de imágenes con opciones de privacidad.
+
+### Requisitos Funcionales
+
+1. Subir imagen.
+2. Buscar imagen por parte del título
+3. Borrar artículo por título de imagen
+4. Listar las diferentes imágenes
+5. Compartir y publicar imagenes
+
+### Detalles tecnicos de gestion de contenidos:
+
+Para realizar la gestión de archivos se hace uso de una librería para express
+llamada _“Express-fileupload”_ una vez el archivo se encuentra en el servidor
+este es almacenado en una carpeta específica para cada usuario, esta
+distribución nos permite usar múltiples servidores para el almacenamiento
+permitiendo la escalabilidad de la aplicación, para la obtención de imágenes
+por búsqueda se llama un método get el cual después de verificar el nombre de
+usuario y los permisos requeridos retorna todas las imágenes que concuerden con
+los terminos de busqueda del usuario siempre en cuando este tenga los permisos
+requeridos, finalmente estas imágenes se retornan dentro del template.

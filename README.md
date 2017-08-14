@@ -1,6 +1,8 @@
 # image_manager
 
-Alejandro Salgado Gomez - asalgad2@eafit.educo
+* Luis Alfredo Gallego Montoya - lgalle17@eafit.educo
+* Jose Luis Alvares Herrera - jalvar53@eafit.educo
+* Alejandro Salgado Gomez - asalgad2@eafit.educo
 
 # Descripción de aplicación
 
@@ -284,3 +286,7 @@ Agregar la configuracion de proxy inverso para el servidor digital ocean:
     $ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u asalgad2 --hp /home/asalgad2
     $ pm2 start app.js
     $ pm2 save
+
+---
+
+# Proyecto 2

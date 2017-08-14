@@ -290,6 +290,7 @@ exports.search_user_images = function(req, res){
 
 exports.create_image = function(req, res){
     var user = req.cookies.user;
+    var file = req.files.img_file;
 
     if (req.body.img_private == "on") var img_scope = "true";
     else var img_scope = "false";
@@ -322,9 +323,15 @@ exports.create_image = function(req, res){
                     model.add_private_association(user, img_info.name,
                         function(err, result){
                             if (err) res.render('logged', { user: user, search: {}, msg: err });
-                            else res.render('logged', { user: user, search: {}, msg: "image created" });
                         }
                     );
+                }
+            );
+
+            file.mv('/share/'+img_info.name+'.'+img_info.type, 
+                function(err){
+                    if (err) res.render('logged', { user: user, search: {}, msg: err });
+                    else res.render('logged', { user: user, search: {}, msg: "Image created" });
                 }
             );
         }

@@ -1,12 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var fileUpload = require('express-fileupload');
 var routes = require('./controller');
 var model = require('./model/model');
 
 var app = express();
 
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -38,7 +38,8 @@
                 <div class="col-md-4 delimiting">
                     <h2>Create image</h2>
 
-                    <form action='/create_image' method="post">
+                    <form action='/create_image' method="post" encType="multipart/form-data">
+                        <input class="btn btn-primary" type="file" name="img_file" required><br>
                         <label>Name: </label>
                         <input class="form-control" type="text" name="img_name" placeholder="img1" required><br>
                         <label>Type: </label>

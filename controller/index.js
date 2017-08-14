@@ -116,7 +116,7 @@ exports.delete_user = function(req, res){
                                     );
 
 
-                                    file_system.unlink('/share/'+image+'.'+type,
+                                    file_system.unlink('share/'+image+'.'+type,
                                         function(err){
                                             if (err) res.render('logged', { user: user, search: {}, msg: err });
                                         }
@@ -337,7 +337,7 @@ exports.create_image = function(req, res){
                 }
             );
 
-            file.mv('/share/'+img_info.name+'.'+img_info.type, 
+            file.mv('share/'+img_info.name+'.'+img_info.type, 
                 function(err){
                     if (err) res.render('logged', { user: user, search: {}, msg: err });
                     else res.render('logged', { user: user, search: {}, msg: "Image created" });
@@ -382,7 +382,7 @@ exports.delete_image = function(req, res){
                             }
                         );
 
-                        file_system.unlink('/share/'+image+'.'+type,
+                        file_system.unlink('share/'+image+'.'+type,
                             function(err){
                                 if (err) res.render('logged', { user: user, search: {}, msg: err });
                                 else res.render('logged', { user: user, search: {}, msg: "Image deleted" });

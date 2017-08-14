@@ -144,24 +144,11 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <table class="table">
-                            <tr>
-                                <th> Name </th>
-                                <th> Type </th>
-                                <th> Size </th>
-                                <th> Dimension </th>
-                            </tr>
 
-                            <% for(var i=0; i<search.length; i++){ %>
-                            <tr>
-                                <th> <%= search[i].name %> </th>
-                                <th> <%= search[i].type %> </th>
-                                <th> <%= search[i].size %> </th>
-                                <th> <%= search[i].dimension %> </th>
-                            </tr>
-                            <% } %>
-                        </table>
+                    <div class="row">
+                        <% for(var i=0; i<search.length; i++){ %>
+                            <img src="<%= search[i].name+"."+search[i].type %>" style="width:300px;height:300px;">
+                        <% } %>
                     </div>
                 </div>
             </div>

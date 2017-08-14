@@ -1,4 +1,5 @@
 var model = require('../model/model');
+var file_system = require('fs');
 
 exports.home = function(req, res){
     res.render('home', { msg: "" });
@@ -89,27 +90,35 @@ exports.delete_user = function(req, res){
             model.search_user_images(user,
                 function(err, result){
                     if (err){
-                        res.render('account', { msg: "error 1" });
+                        res.render('account', { msg: err });
                         return;
                     }
 
                     for (var i=0;i<result.length;i++){
                         image = result[i].name;
+                        type = result[i].type;
 
                         if (result[i].owner == "true"){
                             model.delete_all_image_associations(image,
                                 function(err, result){
                                     if (err){
-                                        res.render('account', { msg: "error 2" });
+                                        res.render('account', { msg: err });
                                         return;
                                     }
 
                                     model.delete_image(image,
                                         function(err, result){
                                             if (err){
-                                                res.render('account', { msg: "error 3" });
+                                                res.render('account', { msg: err });
                                                 return;
                                             }
+                                        }
+                                    );
+
+
+                                    file_system.unlink('/share/'+image+'.'+type,
+                                        function(err){
+                                            if (err) res.render('logged', { user: user, search: {}, msg: err });
                                         }
                                     );
                                 }
@@ -119,7 +128,7 @@ exports.delete_user = function(req, res){
                             model.delete_image_association(user, image,
                                 function(err, result){
                                     if (err){
-                                        res.render('account', { msg: "error 4" });
+                                        res.render('account', { msg: err });
                                         return;
                                     }
                                 }
@@ -129,7 +138,7 @@ exports.delete_user = function(req, res){
 
                     model.delete_user(user,
                         function(err, result){
-                            if (err) res.render('account', { msg: "error 5" });
+                            if (err) res.render('account', { msg: err });
                             else{
                                 res.clearCookie('user');
                                 res.redirect('/');
@@ -354,6 +363,8 @@ exports.delete_image = function(req, res){
                 return;
             }
 
+            var type = result[0].type;
+
             if (result[0].owner == "true"){
                 model.delete_all_image_associations(image,
                     function(err, result){
@@ -364,6 +375,15 @@ exports.delete_image = function(req, res){
 
                         model.delete_image(image,
                             function(err, result){
+                                if (err){
+                                    res.render('logged', { user: user, search: {}, msg: err });
+                                    return;
+                                }
+                            }
+                        );
+
+                        file_system.unlink('/share/'+image+'.'+type,
+                            function(err){
                                 if (err) res.render('logged', { user: user, search: {}, msg: err });
                                 else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
                             }

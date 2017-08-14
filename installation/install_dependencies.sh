@@ -3,6 +3,7 @@
 cd ..
 
 npm install express --save
+npm install express-fileupload --save
 npm install body-parser --save
 npm install cookie-parser --save
 npm install mysql --save

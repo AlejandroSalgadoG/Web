@@ -62,6 +62,25 @@ exports.delete_image = function(req, res){
     var image = req.body.del_img_name;
     model.search_user_image(user, image, logged_ctrl.delete_image(req, res));
 }
+
+exports.search_images_by_name = function(req, res){
+    if (req.cookies.user == undefined) return res.render('error');
+
+    var user = req.cookies.user;
+    var image = req.query.img_search;
+
+    model.search_like_user_images(user, image, logged_ctrl.search_images_by_name(req, res));
+}
+
+exports.search_images_by_type = function(req, res){
+    if (req.cookies.user == undefined) return res.render('error');
+
+    var user = req.cookies.user;
+
+    if (req.query.public != undefined) model.search_public_images(logged_ctrl.search_images_by_type(req, res));
+    else if (req.query.shared != undefined) model.search_shared_images(user, logged_ctrl.search_images_by_type(req, res));
+    else if (req.query.private != undefined) model.search_private_images(user, logged_ctrl.search_images_by_type(req, res));
+}
 //END LOGGED FUNCTIONS
 
 //BEGIN ACCOUNT FUNCTIONS
@@ -75,66 +94,3 @@ exports.update_password = function(req, res){
     model.consult_password(user, account_ctrl.update_password(req, res));
 }
 //END ACCOUNT FUNCTIONS
-
-exports.search_public_images = function(req, res){
-    if (req.cookies.user == undefined){
-        res.render('error');
-        return;
-    }
-
-    var user = req.cookies.user;
-    model.search_public_images(
-        function(err, result){
-            if (err) res.render('logged', { user: user, search : {}, msg: err } );
-            else res.render('logged', { user: user, search : result, msg: "" } );
-        }
-    );
-}
-
-exports.search_private_images = function(req, res){
-    if (req.cookies.user == undefined){
-        res.render('error');
-        return;
-    }
-
-    var user = req.cookies.user;
-    model.search_private_images(user,
-        function(err, result){
-            if (err) res.render('logged', { user: user, search : {}, msg: err } );
-            else res.render('logged', { user: user, search : result, msg: "" } );
-        }
-    );
-}
-
-exports.search_shared_images = function(req, res){
-    if (req.cookies.user == undefined){
-        res.render('error');
-        return;
-    }
-
-    var user = req.cookies.user;
-    model.search_shared_images(user,
-        function(err, result){
-            if (err) res.render('logged', { user: user, search : {}, msg: err } );
-            else res.render('logged', { user: user, search : result, msg: "" } );
-        }
-    );
-}
-
-exports.search_user_images = function(req, res){
-    if (req.cookies.user == undefined){
-        res.render('error');
-        return;
-    }
-
-    var user = req.cookies.user;
-    var image = req.query.img_search;
-
-    model.search_like_user_images(user, image,
-        function(err, result){
-            if (err) res.render('logged', { user: user, search: {}, msg: err });
-            else if (result.length == 0) res.render('logged', { user: user, search: {}, msg: "Bad image" });
-            else res.render('logged', { user: user, search : result, msg: "" } );
-        }
-    );
-}

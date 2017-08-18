@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + '/public'));
-app.use(express.static('/share'))
+app.use(express.static(__dirname + '/share'))
 app.set('view engine', 'ejs');
 
 // Routes
@@ -21,10 +21,8 @@ app.get('/', routes.home);
 app.get('/logout', routes.logout);
 app.get('/read_users', routes.read_users);
 app.get('/manage_account', routes.manage_account);
-app.get('/search_public_images', routes.search_public_images);
-app.get('/search_private_images', routes.search_private_images);
-app.get('/search_shared_images', routes.search_shared_images);
-app.get('/search_user_images', routes.search_user_images);
+app.get('/search_images_by_name', routes.search_images_by_name);
+app.get('/search_images_by_type', routes.search_images_by_type);
 
 app.post('/login', routes.login);
 app.post('/register', routes.register);

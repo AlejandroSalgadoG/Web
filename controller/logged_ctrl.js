@@ -135,3 +135,24 @@ function delete_image_helper(req, res, type){
     }
 }
 //END IMAGE DELETE
+
+//BEGIN IMAGE SEARCH
+exports.search_images_by_name = function(req, res){
+    var user = req.cookies.user;
+
+    return function(err, result){
+        if (err) res.render('logged', get_json(user, err));
+        else if (result.length == 0) res.render('logged', get_json(user, "Bad image"));
+        else res.render('logged', { user:user, search:result, msg:"" } );
+    }
+}
+
+exports.search_images_by_type = function(req, res){
+    var user = req.cookies.user;
+
+    return function(err, result){
+        if (err) res.render('logged', get_json(user, err));
+        else res.render('logged', { user:user, search:result, msg:"" } );
+    }
+}
+//END IMAGE SEARCH

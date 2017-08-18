@@ -118,29 +118,18 @@
                     <div>
                         <h2>Search images</h2>
 
-                        <form action='/search_user_images' method="get">
+                        <form action='/search_images_by_name' method="get">
                             <input class="form-control" type="text" name="img_search" required>
                             <br>
                             <button class="btn btn-primary" type="submit"> Search </button>
                         </form>
-
                         <br>
                         <div class="row">
-                            <div class="col-2">
-                                <form class="form-inline" action='/search_public_images' method="get">
-                                    <button class="btn btn-outline-primary" type="submit"> Public </button>
-                                </form>
-                            </div>
-                            <div class="col-2">
-                                <form class="form-inline" action='/search_shared_images' method="get">
-                                    <button class="btn btn-outline-primary" type="submit"> Shared </button>
-                                </form>
-                            </div>
-                            <div class="col">
-                                <form class="form-inline" action='/search_private_images' method="get">
-                                    <button class="btn btn-outline-primary" type="submit"> My images </button>
-                                </form>
-                            </div>
+                            <form class="form-inline" action='/search_images_by_type' method="get">
+                                <button class="btn btn-outline-primary" type="submit" name="public"> Public </button>
+                                <button class="btn btn-outline-primary" type="submit" name="shared"> Shared </button>
+                                <button class="btn btn-outline-primary" type="submit" name="private"> My images </button>
+                            </form>
                         </div>
                     </div>
 

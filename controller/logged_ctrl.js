@@ -1,3 +1,5 @@
+var file_system = require('fs');
+
 var model = require('../model/model');
 
 //BEGIN GENERIC FUNCTIONS
@@ -104,3 +106,33 @@ exports.update_image = function(req, res){
     }
 }
 //END IMAGE UPDATE
+
+//BEGIN IMAGE DELETE
+exports.delete_image = function(req, res){
+    var user = req.cookies.user;
+    var image = req.body.del_img_name;
+
+    return function(err, result){
+        if (err) return res.render('logged', get_json(user, err));
+        if (result.length == 0) return res.render('logged', get_json(user, "Bad image"));
+
+        var type = result[0].type;
+
+        if (result[0].owner == "true") model.delete_all_image_associations(image, delete_image_helper(req, res, type));
+        else model.delete_image_association(user, image, msg_fun(req, res, "Image deleted"));
+    }
+}
+
+function delete_image_helper(req, res, type){
+    var user = req.cookies.user;
+    var image = req.body.del_img_name;
+
+    return function(err, result){
+        if (err) return res.render('logged', get_json(user, err));
+        model.delete_image(image, err_fun(req, res));
+
+        var img_path = 'share/'+image+'.'+type;
+        file_system.unlink(img_path, msg_fun(req, res, "Image deleted"));
+    }
+}
+//END IMAGE DELETE

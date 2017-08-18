@@ -55,6 +55,12 @@ exports.update_image = function(req, res){
     model.search_user_image(user, name, logged_ctrl.update_image(req, res));
 }
 
+exports.delete_image = function(req, res){
+    var user = req.cookies.user;
+    var image = req.body.del_img_name;
+    model.search_user_image(user, image, logged_ctrl.delete_image(req, res));
+}
+
 exports.search_public_images = function(req, res){
     if (req.cookies.user == undefined){
         res.render('error');
@@ -114,64 +120,6 @@ exports.search_user_images = function(req, res){
             if (err) res.render('logged', { user: user, search: {}, msg: err });
             else if (result.length == 0) res.render('logged', { user: user, search: {}, msg: "Bad image" });
             else res.render('logged', { user: user, search : result, msg: "" } );
-        }
-    );
-}
-
-
-
-exports.delete_image = function(req, res){
-    var user = req.cookies.user;
-    var image = req.body.del_img_name;
-
-    model.search_user_image(user, image,
-        function(err, result){
-            if (err){
-                res.render('logged', { user: user, search: {}, msg: err });
-                return;
-            }
-
-            if (result.length == 0){
-                res.render('logged', { user: user, search: {}, msg: "Bad image" });
-                return;
-            }
-
-            var type = result[0].type;
-
-            if (result[0].owner == "true"){
-                model.delete_all_image_associations(image,
-                    function(err, result){
-                        if (err){
-                            res.render('logged', { user: user, search: {}, msg: err });
-                            return;
-                        }
-
-                        model.delete_image(image,
-                            function(err, result){
-                                if (err){
-                                    res.render('logged', { user: user, search: {}, msg: err });
-                                    return;
-                                }
-                            }
-                        );
-
-                        file_system.unlink('share/'+image+'.'+type,
-                            function(err){
-                                if (err) res.render('logged', { user: user, search: {}, msg: err });
-                                else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
-                            }
-                        );
-                    }
-                );
-            }
-            else{
-                model.delete_image_association(user, image,
-                    function(err, result){
-                        if (err) res.render('logged', { user: user, search: {}, msg: err });
-                        else res.render('logged', { user: user, search: {}, msg: "Image deleted" });
-                    }
-                );
-            }
         }
     );
 }

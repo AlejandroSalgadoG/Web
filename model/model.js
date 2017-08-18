@@ -37,7 +37,7 @@ exports.consult_password = function(user, callback_fun){
 }
 
 exports.create_user = function(info, callback_fun){
-    var query_var = 'INSERT INTO users VALUES ("'+info.user+'", "'+info.password+'");';
+    var query_var = 'INSERT INTO users VALUES ("'+info.user+'", "'+info.pass+'");';
     execute_query(query_var, callback_fun);
 }
 

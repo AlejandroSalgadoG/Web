@@ -23,9 +23,9 @@
                 <form action='/login' method="post">
                     <div class="form-group">
                         <label>User: </label>
-                        <input class="form-control" type="text" name="user"><br>
+                        <input class="form-control" type="text" name="user" required><br>
                         <label>Password: </label>
-                        <input class="form-control" type="password" name="password"><br>
+                        <input class="form-control" type="password" name="password" required><br>
                     </div>
 
                     <button class="btn btn-primary" type="submit">Enter</button>
@@ -35,14 +35,14 @@
             <div class="col-md-6">
                 <h3>Register</h3>
 
-                <form action='/register' method="post">
+                <form name="regist_form" action='/register' onsubmit="return validate_regist_form()" method="post">
                     <div class="form-group">
                         <label>User: </label>
-                        <input class="form-control" type="text" name="ruser"><br>
+                        <input class="form-control" type="text" name="ruser" required><br>
                         <label>Password: </label>
-                        <input class="form-control" type="password" name="rpassword"><br>
+                        <input class="form-control" type="password" name="rpassword" required><br>
                         <label>Retype Password: </label>
-                        <input class="form-control" type="password" name="rpassword2"><br>
+                        <input class="form-control" type="password" name="rpassword2" required><br>
                     </div>
 
                     <button class="btn btn-primary" type="submit">Register</button>
@@ -63,4 +63,6 @@
 
         <%= msg %>
     </body>
+
+    <script type="text/javascript" src="/scripts/home.js"></script>
 </html>

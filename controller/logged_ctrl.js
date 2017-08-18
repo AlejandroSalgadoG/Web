@@ -21,6 +21,7 @@ function msg_fun(req, res, msg){
 }
 //END GENERIC FUNCTIONS
 
+//BEGIN IMAGE CREATION
 exports.create_image = function(req, res){
     var user = req.cookies.user;
     var file = req.files.img_file;
@@ -52,3 +53,32 @@ function create_image_helper(req, res){
         else model.add_private_association(user, img_name, err_fun(req, res));
     }
 }
+//END IMAGE CREATION
+
+//BEGIN IMAGE SHARING
+exports.share_image = function(req, res){
+    var user = req.cookies.user;
+    var user_share = req.body.img_user_share;
+
+    return function(err, result){
+        if (err) return res.render('logged', get_json(user, err));
+        if (result.length == 0) return res.render('logged', get_json(user, "Bad image"));
+
+        model.search_user(user_share, share_image_helper(req, res));
+    }
+}
+
+function share_image_helper(req, res){
+    var user = req.cookies.user;
+    var user_share = req.body.img_user_share;
+    var image = req.body.img_name_share;
+
+    return function(err, result){
+        if (err) return res.render('logged', get_json(user, err));
+        if (result.length == 0) return res.render('logged', get_json(user, "Bad user"));
+
+        if (req.body.share != undefined) model.share_image(user_share, image, msg_fun(req, res, "Image shared"));
+        else model.delete_image_association(user_share, image, msg_fun(req, res, "Image unshared"));
+    }
+}
+//END IMAGE SHARING

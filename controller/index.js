@@ -28,14 +28,14 @@ exports.read_users = function(req, res){
 //END HOME FUNCTIONS
 
 //BEGIN LOGGED FUNCTIONS
-exports.logout = function(req, res){
-    res.clearCookie('user');
-    res.redirect('/');
-}
-
 exports.manage_account = function(req, res){
     if (req.cookies.user == undefined) res.render('error');
     else res.render('account', { msg:"" });
+}
+
+exports.logout = function(req, res){
+    res.clearCookie('user');
+    res.redirect('/');
 }
 
 exports.create_image = function(req, res){
@@ -45,49 +45,8 @@ exports.create_image = function(req, res){
 
 exports.share_image = function(req, res){
     var user = req.cookies.user;
-    var user_share = req.body.img_user_share;
     var image = req.body.img_name_share;
-
-    model.search_user_image(user, image,
-        function(err, result){
-            if (err) return res.render('logged', { user: user, search: {}, msg: err });
-
-            if (result.length == 0){
-                res.render('logged', { user: user, search: {}, msg: "Bad image" });
-                return;
-            }
-
-            model.search_user(user_share,
-                function(err, result){
-                    if (err){
-                        res.render('logged', { user: user, search: {}, msg: err });
-                        return;
-                    }
-
-                    if (result.length == 0){
-                        res.render('logged', { user: user, search: {}, msg: "Bad user" });
-                        return;
-                    }
-
-                    if (req.body.share != undefined){
-                        model.share_image(user_share, image,
-                            function(err, result){
-                                if (err) res.render('logged', { user: user, search: {}, msg: err });
-                                else res.render('logged', { user: user, search: {}, msg: "image shared" });
-                            }
-                        );
-                    }else{
-                        model.delete_image_association(user_share, image,
-                            function(err, result){
-                                if (err) res.render('logged', { user: user, search: {}, msg: err });
-                                else res.render('logged', { user: user, search: {}, msg: "image unshared" });
-                            }
-                        );
-                    }
-                }
-            );
-        }
-    );
+    model.search_user_image(user, image, logged_ctrl.share_image(req, res));
 }
 
 exports.search_public_images = function(req, res){

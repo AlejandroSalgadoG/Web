@@ -49,6 +49,12 @@ exports.share_image = function(req, res){
     model.search_user_image(user, image, logged_ctrl.share_image(req, res));
 }
 
+exports.update_image = function(req, res){
+    var user = req.cookies.user;
+    var name = req.body.img_name;
+    model.search_user_image(user, name, logged_ctrl.update_image(req, res));
+}
+
 exports.search_public_images = function(req, res){
     if (req.cookies.user == undefined){
         res.render('error');
@@ -166,41 +172,6 @@ exports.delete_image = function(req, res){
                     }
                 );
             }
-        }
-    );
-}
-
-exports.update_image = function(req, res){
-    var user = req.cookies.user;
-
-    var img_scope;
-    if (req.body.img_private2 == "on") var img_scope = "true";
-    else if (req.body.img_public2 == "on") var img_scope = "false";
-
-    var img_info = { name: req.body.img_name,
-                     type: req.body.img_type,
-                     size: req.body.img_size,
-                     dimension: req.body.img_dimension,
-                     scope: img_scope };
-
-    model.search_user_image(user, img_info.name,
-        function(err, result){
-            if (err){
-                res.render('logged', { user: user, search: {}, msg: err });
-                return;
-            }
-
-            if (result.length == 0){
-                res.render('logged', { user: user, search: {}, msg: "Bad image" });
-                return;
-            }
-
-            model.update_image(img_info,
-                function(err, result){
-                    if (err) res.render('logged', { user: user, search: {}, msg: err });
-                    else res.render('logged', { user: user, search: {}, msg: "Image updated" });
-                }
-            );
         }
     );
 }

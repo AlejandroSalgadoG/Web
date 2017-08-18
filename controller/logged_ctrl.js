@@ -82,3 +82,25 @@ function share_image_helper(req, res){
     }
 }
 //END IMAGE SHARING
+
+//BEGIN IMAGE UPDATE
+exports.update_image = function(req, res){
+    var user = req.cookies.user;
+
+    var img_scope;
+    if (req.body.img_private2 == "on") img_scope = "true";
+    else if (req.body.img_public2 == "on") img_scope = "false";
+
+    var img_info = { name: req.body.img_name,
+                     type: req.body.img_type,
+                     size: req.body.img_size,
+                     dimension: req.body.img_dimension,
+                     scope: img_scope };
+
+    return function(err, result){
+        if (err) return res.render('logged', get_json(user, err));
+        if (result.length == 0) return res.render('logged', get_json(user, "Bad image"));
+        model.update_image(img_info, msg_fun(req, res, "Image updated"));
+    }
+}
+//END IMAGE UPDATE

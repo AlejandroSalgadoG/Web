@@ -2,6 +2,7 @@ var file_system = require('fs');
 
 var home_ctrl = require('./home_ctrl');
 var logged_ctrl = require('./logged_ctrl');
+var account_ctrl = require('./account_ctrl');
 var model = require('../model/model');
 
 //ROOT FUNCTION
@@ -124,67 +125,10 @@ exports.search_user_images = function(req, res){
     );
 }
 
+//BEGIN ACCOUNT FUNCTIONS
 exports.delete_user = function(req, res){
     var user = req.cookies.user;
-    var pass = req.body.password;
-
-    model.consult_password(user,
-        function(err, result){
-            if (err) return res.render('account', { msg: err });
-
-            var true_pass = result[0].password;
-
-            if (pass != true_pass)
-                return res.render('account', { msg: "Bad password" });
-
-            model.search_user_images(user,
-                function(err, result){
-                    if (err) return res.render('account', { msg: err });
-
-                    for (var i=0;i<result.length;i++){
-                        image = result[i].name;
-                        type = result[i].type;
-
-                        if (result[i].owner == "true"){
-                            model.delete_all_image_associations(image,
-                                function(err, result){
-                                    if (err) return res.render('account', { msg: err });
-
-                                    model.delete_image(image, 
-                                        function(err, result){
-                                            if (err) return res.render('account', { msg:err });
-                                        }
-                                    );
-
-                                    var img = 'share/'+image+'.'+type;
-
-                                    file_system.unlink(img, 
-                                        function(err, result){
-                                            if (err) return res.render('logged', { user:user, search:{}, msg:err });
-                                        }        
-                                    );
-                                }
-                            );
-                        }
-                        else
-                            model.delete_image_association(user, image, 
-                                function(err, result){
-                                    if (err) return res.render('account', { msg:err });
-                                }
-                            );
-                    }
-
-                    model.delete_user(user,
-                        function(err, result){
-                            if (err) return res.render('account', { msg: err });
-                            res.clearCookie('user');
-                            res.redirect('/');
-                        }
-                    );
-                }
-            );
-        }
-    );
+    model.consult_password(user, account_ctrl.delete_user(req, res));
 }
 
 exports.update_user = function(req, res){
@@ -214,3 +158,4 @@ exports.update_user = function(req, res){
         }
     );
 }
+//END ACCOUNT FUNCTIONS

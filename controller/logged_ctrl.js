@@ -1,5 +1,4 @@
 var file_system = require('fs');
-
 var model = require('../model/model');
 
 //BEGIN GENERIC FUNCTIONS

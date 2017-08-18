@@ -17,7 +17,7 @@ exports.delete_user = function(req, res){
 
     return function(err, result){
         if (err) return res.render('account', { msg: err });
-        
+
         var true_pass = result[0].password;
         if (pass != true_pass) return res.render('account', { msg: "Bad password" });
 
@@ -60,3 +60,28 @@ function delete_user_finalization(req, res){
     }
 }
 //END USER DELETE
+
+//BEGIN PASSWORD UPDATE
+exports.update_password = function(req, res){
+    var user = req.cookies.user;
+    var old_pass = req.body.old_password;
+    var new_pass = req.body.new_password;
+
+    return function(err, result){
+        if (err) return res.render('account', { msg: err });
+
+        var true_pass = result[0].password;
+        if (old_pass != true_pass) return res.render('account', { msg: "Bad password" });
+
+        model.change_password({ user:user, password:new_pass }, update_password_helper(req, res));
+    }
+}
+
+function update_password_helper(req, res){
+    var user = req.cookies.user;
+    return function(err, result){
+        if (err) res.render('account', { msg:err });
+        else res.render('logged', { user:user, search:{}, msg:"User updated" });
+    }
+}
+//END PASSWORD UPDATE

@@ -29,7 +29,7 @@ app.get('/search_user_images', routes.search_user_images);
 app.post('/login', routes.login);
 app.post('/register', routes.register);
 app.post('/delete_user', routes.delete_user);
-app.post('/update_password', routes.update_user);
+app.post('/update_password', routes.update_password);
 app.post('/create_image', routes.create_image);
 app.post('/update_image', routes.update_image);
 app.post('/share_image', routes.share_image);

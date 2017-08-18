@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h2 class="text-center">Update password</h2>
-                        <form action='/update_password' method="post">
+                        <form name="update_pass_form" action='/update_password' onsubmit="return validate_pass_update()" method="post">
                             <label>Old password: </label>
                             <input class="form-control" type="password" name="old_password" required><br>
                             <label>New password: </label>
@@ -48,4 +48,6 @@
 
             <%= msg %>
     </body>
+
+    <script type="text/javascript" src="/scripts/account.js"></script>
 </html>

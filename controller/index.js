@@ -3,12 +3,14 @@ var file_system = require('fs');
 var home_ctrl = require('./home_ctrl');
 var logged_ctrl = require('./logged_ctrl');
 var account_ctrl = require('./account_ctrl');
+
 var model = require('../model/model');
 
-//ROOT FUNCTION
+//BEGIN ROOT FUNCTION
 exports.home = function(req, res){
     res.render('home', { msg:"" });
 }
+//END ROOT FUNCTION
 
 //BEGIN HOME FUNCTIONS
 exports.login = function(req, res){
@@ -19,7 +21,6 @@ exports.login = function(req, res){
 exports.register = function(req, res){
     var user = req.body.ruser;
     var pass = req.body.rpassword;
-
     model.create_user( { user:user, pass:pass }, home_ctrl.register(req, res));
 }
 
@@ -61,6 +62,19 @@ exports.delete_image = function(req, res){
     var image = req.body.del_img_name;
     model.search_user_image(user, image, logged_ctrl.delete_image(req, res));
 }
+//END LOGGED FUNCTIONS
+
+//BEGIN ACCOUNT FUNCTIONS
+exports.delete_user = function(req, res){
+    var user = req.cookies.user;
+    model.consult_password(user, account_ctrl.delete_user(req, res));
+}
+
+exports.update_password = function(req, res){
+    var user = req.cookies.user;
+    model.consult_password(user, account_ctrl.update_password(req, res));
+}
+//END ACCOUNT FUNCTIONS
 
 exports.search_public_images = function(req, res){
     if (req.cookies.user == undefined){
@@ -124,38 +138,3 @@ exports.search_user_images = function(req, res){
         }
     );
 }
-
-//BEGIN ACCOUNT FUNCTIONS
-exports.delete_user = function(req, res){
-    var user = req.cookies.user;
-    model.consult_password(user, account_ctrl.delete_user(req, res));
-}
-
-exports.update_user = function(req, res){
-    var user = req.cookies.user;
-    var old_pass = req.body.old_password;
-    var new_pass = req.body.new_password;
-    var new_pass2 = req.body.new_password2;
-
-    if ((new_pass != new_pass2) || (new_pass == ""))
-        return res.render('account', { msg: "Bad passwords" });
-
-    model.consult_password(user,
-        function(err, result){
-            if (err) return res.render('account', { msg: err });
-
-            var true_pass = result[0].password;
-
-            if (old_pass == true_pass){
-                model.change_password( { user: user, password: new_pass },
-                    function(err, result){
-                        if (err) res.render('account', { msg: err });
-                        else res.render('logged', { user: user, search: {}, msg: "User updated" });
-                    }
-                );
-            }
-            else res.render('account', { msg: "Bad password" });
-        }
-    );
-}
-//END ACCOUNT FUNCTIONS

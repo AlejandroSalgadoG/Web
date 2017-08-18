@@ -1,6 +1,7 @@
 var file_system = require('fs');
 
 var home_ctrl = require('./home_ctrl');
+var logged_ctrl = require('./logged_ctrl');
 var model = require('../model/model');
 
 //ROOT FUNCTION
@@ -37,95 +38,9 @@ exports.manage_account = function(req, res){
     else res.render('account', { msg:"" });
 }
 
-exports.delete_user = function(req, res){
-    var user = req.cookies.user;
-    var pass = req.body.password;
-
-    model.consult_password(user,
-        function(err, result){
-            if (err) return res.render('account', { msg: err });
-
-            var true_pass = result[0].password;
-
-            if (pass != true_pass)
-                return res.render('account', { msg: "Bad password" });
-
-            model.search_user_images(user,
-                function(err, result){
-                    if (err) return res.render('account', { msg: err });
-
-                    for (var i=0;i<result.length;i++){
-                        image = result[i].name;
-                        type = result[i].type;
-
-                        if (result[i].owner == "true"){
-                            model.delete_all_image_associations(image,
-                                function(err, result){
-                                    if (err) return res.render('account', { msg: err });
-
-                                    model.delete_image(image, 
-                                        function(err, result){
-                                            if (err) return res.render('account', { msg:err });
-                                        }
-                                    );
-
-                                    var img = 'share/'+image+'.'+type;
-
-                                    file_system.unlink(img, 
-                                        function(err, result){
-                                            if (err) return res.render('logged', { user:user, search:{}, msg:err });
-                                        }        
-                                    );
-                                }
-                            );
-                        }
-                        else
-                            model.delete_image_association(user, image, 
-                                function(err, result){
-                                    if (err) return res.render('account', { msg:err });
-                                }
-                            );
-                    }
-
-                    model.delete_user(user,
-                        function(err, result){
-                            if (err) return res.render('account', { msg: err });
-                            res.clearCookie('user');
-                            res.redirect('/');
-                        }
-                    );
-                }
-            );
-        }
-    );
-}
-
-exports.update_user = function(req, res){
-    var user = req.cookies.user;
-    var old_pass = req.body.old_password;
-    var new_pass = req.body.new_password;
-    var new_pass2 = req.body.new_password2;
-
-    if ((new_pass != new_pass2) || (new_pass == ""))
-        return res.render('account', { msg: "Bad passwords" });
-
-    model.consult_password(user,
-        function(err, result){
-            if (err) return res.render('account', { msg: err });
-
-            var true_pass = result[0].password;
-
-            if (old_pass == true_pass){
-                model.change_password( { user: user, password: new_pass },
-                    function(err, result){
-                        if (err) res.render('account', { msg: err });
-                        else res.render('logged', { user: user, search: {}, msg: "User updated" });
-                    }
-                );
-            }
-            else res.render('account', { msg: "Bad password" });
-        }
-    );
+exports.create_image = function(req, res){
+    var name = req.body.img_name;
+    model.search_image(name, logged_ctrl.create_image(req, res));
 }
 
 exports.share_image = function(req, res){
@@ -238,55 +153,7 @@ exports.search_user_images = function(req, res){
     );
 }
 
-exports.create_image = function(req, res){
-    var user = req.cookies.user;
-    var file = req.files.img_file;
 
-    if (req.body.img_private == "on") var img_scope = "true";
-    else var img_scope = "false";
-
-    var img_info = { name: req.body.img_name,
-                 type: req.body.img_type,
-                 size: req.body.img_size,
-                 dimension: req.body.img_dimension,
-                 scope: img_scope };
-
-    model.search_image(img_info.name,
-        function(err, result){
-            if (err){
-                res.render('logged', { user: user, search: {}, msg: err });
-                return;
-            }
-
-            if (result.length != 0){
-                res.render('logged', { user: user, search: {}, msg: "The image already exists" });
-                return;
-            }
-
-            model.create_image(img_info,
-                function(err, result){
-                    if (err){
-                        res.render('logged', { user: user, search: {}, msg: err });
-                        return;
-                    }
-
-                    model.add_private_association(user, img_info.name,
-                        function(err, result){
-                            if (err) res.render('logged', { user: user, search: {}, msg: err });
-                        }
-                    );
-                }
-            );
-
-            file.mv('share/'+img_info.name+'.'+img_info.type,
-                function(err){
-                    if (err) res.render('logged', { user: user, search: {}, msg: err });
-                    else res.render('logged', { user: user, search: {}, msg: "Image created" });
-                }
-            );
-        }
-    );
-}
 
 exports.delete_image = function(req, res){
     var user = req.cookies.user;
@@ -375,6 +242,97 @@ exports.update_image = function(req, res){
                     else res.render('logged', { user: user, search: {}, msg: "Image updated" });
                 }
             );
+        }
+    );
+}
+
+exports.delete_user = function(req, res){
+    var user = req.cookies.user;
+    var pass = req.body.password;
+
+    model.consult_password(user,
+        function(err, result){
+            if (err) return res.render('account', { msg: err });
+
+            var true_pass = result[0].password;
+
+            if (pass != true_pass)
+                return res.render('account', { msg: "Bad password" });
+
+            model.search_user_images(user,
+                function(err, result){
+                    if (err) return res.render('account', { msg: err });
+
+                    for (var i=0;i<result.length;i++){
+                        image = result[i].name;
+                        type = result[i].type;
+
+                        if (result[i].owner == "true"){
+                            model.delete_all_image_associations(image,
+                                function(err, result){
+                                    if (err) return res.render('account', { msg: err });
+
+                                    model.delete_image(image, 
+                                        function(err, result){
+                                            if (err) return res.render('account', { msg:err });
+                                        }
+                                    );
+
+                                    var img = 'share/'+image+'.'+type;
+
+                                    file_system.unlink(img, 
+                                        function(err, result){
+                                            if (err) return res.render('logged', { user:user, search:{}, msg:err });
+                                        }        
+                                    );
+                                }
+                            );
+                        }
+                        else
+                            model.delete_image_association(user, image, 
+                                function(err, result){
+                                    if (err) return res.render('account', { msg:err });
+                                }
+                            );
+                    }
+
+                    model.delete_user(user,
+                        function(err, result){
+                            if (err) return res.render('account', { msg: err });
+                            res.clearCookie('user');
+                            res.redirect('/');
+                        }
+                    );
+                }
+            );
+        }
+    );
+}
+
+exports.update_user = function(req, res){
+    var user = req.cookies.user;
+    var old_pass = req.body.old_password;
+    var new_pass = req.body.new_password;
+    var new_pass2 = req.body.new_password2;
+
+    if ((new_pass != new_pass2) || (new_pass == ""))
+        return res.render('account', { msg: "Bad passwords" });
+
+    model.consult_password(user,
+        function(err, result){
+            if (err) return res.render('account', { msg: err });
+
+            var true_pass = result[0].password;
+
+            if (old_pass == true_pass){
+                model.change_password( { user: user, password: new_pass },
+                    function(err, result){
+                        if (err) res.render('account', { msg: err });
+                        else res.render('logged', { user: user, search: {}, msg: "User updated" });
+                    }
+                );
+            }
+            else res.render('account', { msg: "Bad password" });
         }
     );
 }

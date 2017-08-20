@@ -10,26 +10,26 @@ CREATE TABLE users(
 );
 
 CREATE TABLE images(
-    name varchar(32),
-    type varchar(32) NOT NULL,
-    size int NOT NULL,
-    dimension varchar(32) NOT NULL,
+    id int AUTO_INCREMENT,
+    name varchar(32) NOT NULL,
+    path varchar(32) NOT NULL,
     private varchar(5) NOT NULL,
-    PRIMARY KEY (name)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE associations(
     userid varchar(32),
-    imageid varchar(32),
+    imageid int,
     owner varchar(5) NOT NULL,
     PRIMARY KEY (userid, imageid),
     CONSTRAINT FK_userid FOREIGN KEY (userid) REFERENCES users(user),
-    CONSTRAINT FK_imageid FOREIGN KEY (imageid) REFERENCES images(name)
+    CONSTRAINT FK_imageid FOREIGN KEY (imageid) REFERENCES images(id)
 );
 
 /*
 INSERT INTO users (user, password) VALUES ('alejandro', 'jaja19');
-INSERT INTO images (name, type, size, dimension, private) VALUES ('img1', 'jpg', '1', '512x512', 'true');
+INSERT INTO images (id, name, path, private) VALUES (1, 'img1', 'share/', 'true');
+INSERT INTO associations (userid, imageid, owner) VALUES ('alejandro', 1, 'true');
 */
 
 /*

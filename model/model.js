@@ -26,21 +26,51 @@ exports.connect_db = function(){
     connection.connect(error_fun);
 }
 
-exports.consult_users = function(callback_fun){
-    var query_var = 'SELECT user FROM users;';
-    execute_query(query_var, callback_fun);
-}
-
 exports.consult_password = function(user, callback_fun){
     var query_var = 'SELECT password FROM users WHERE user="'+user+'";';
     execute_query(query_var, callback_fun);
 }
 
-exports.create_user = function(info, callback_fun){
-    var query_var = 'INSERT INTO users VALUES ("'+info.user+'", "'+info.pass+'");';
+exports.create_user = function(user, pass, callback_fun){
+    var query_var = 'INSERT INTO users VALUES ("'+user+'", "'+pass+'");';
     execute_query(query_var, callback_fun);
 }
 
+exports.consult_users = function(callback_fun){
+    var query_var = 'SELECT user FROM users;';
+    execute_query(query_var, callback_fun);
+}
+
+exports.search_user_image = function(user, img, callback_fun){
+    var query_var = 'SELECT * FROM images \
+                     INNER JOIN associations ON id=imageid \
+                     WHERE userid="'+user+'" AND name="'+img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.create_image = function(info, callback_fun){
+    var query_var = 'INSERT INTO images (name, path, private) \
+                     VALUES ("'+info.name+'", "'+info.path+'", "'+info.scope+'");';
+    execute_query(query_var, callback_fun);
+}
+
+exports.search_user = function(user, callback_fun){
+    var query_var = 'SELECT user FROM users WHERE user="'+user+'";';
+    execute_query(query_var, callback_fun);
+}
+
+exports.create_image_association = function(info, callback_fun){
+    var query_var = 'INSERT INTO associations \
+                     VALUES ("'+info.user+'", "'+info.img+'", "'+info.scope+'");';
+    execute_query(query_var, callback_fun);
+}
+
+exports.delete_image_association = function(info, callback_fun){
+    var query_var = 'DELETE FROM associations WHERE userid="'+info.user+'" AND imageid="'+info.img+'";';
+    execute_query(query_var, callback_fun);
+}
+
+//Redy untill here
 exports.delete_user = function(user, callback_fun){
     var query_var = 'DELETE FROM users WHERE user="'+user+'";';
     execute_query(query_var, callback_fun);
@@ -70,30 +100,6 @@ exports.search_shared_images = function(user, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
-exports.create_image = function(info, callback_fun){
-    var query_var = 'INSERT INTO images (name, type, size, dimension, private) \
-                     VALUES ("'+info.name+'", "'+info.type+'", '+info.size+', "'+info.dimension+'", "'+info.scope+'");';
-    execute_query(query_var, callback_fun);
-}
-
-exports.add_private_association = function(user, img, callback_fun){
-    var query_var = 'INSERT INTO associations \
-                     VALUES ("'+user+'", "'+img+'", "true");';
-    execute_query(query_var, callback_fun);
-}
-
-exports.search_image = function(img, callback_fun){
-    var query_var = 'SELECT * FROM images WHERE name="'+img+'";';
-    execute_query(query_var, callback_fun);
-}
-
-exports.search_user_image = function(user, img, callback_fun){
-    var query_var = 'SELECT * FROM images \
-                     INNER JOIN associations ON name=imageid \
-                     WHERE userid="'+user+'" AND imageid="'+img+'";';
-    execute_query(query_var, callback_fun);
-}
-
 exports.search_user_images = function(user, callback_fun){
     var query_var = 'SELECT * FROM images \
                      INNER JOIN associations ON name=imageid \
@@ -108,18 +114,8 @@ exports.search_like_user_images = function(user, img, callback_fun){
     execute_query(query_var, callback_fun);
 }
 
-exports.search_user = function(user, callback_fun){
-    var query_var = 'SELECT user FROM users WHERE user="'+user+'";';
-    execute_query(query_var, callback_fun);
-}
-
 exports.delete_image = function(img, callback_fun){
     var query_var = 'DELETE FROM images WHERE name="'+img+'";';
-    execute_query(query_var, callback_fun);
-}
-
-exports.delete_image_association = function(user, img, callback_fun){
-    var query_var = 'DELETE FROM associations WHERE userid="'+user+'" AND imageid="'+img+'";';
     execute_query(query_var, callback_fun);
 }
 
@@ -140,12 +136,6 @@ exports.update_image = function(info, callback_fun){
 
     query_var += 'WHERE name="'+info.name+'";';
 
-    execute_query(query_var, callback_fun);
-}
-
-exports.share_image = function(user, img, callback_fun){
-    var query_var = 'INSERT INTO associations \
-                     VALUES ("'+user+'", "'+img+'", "false");';
     execute_query(query_var, callback_fun);
 }
 

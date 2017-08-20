@@ -42,18 +42,9 @@
                         <input class="btn btn-primary" type="file" name="img_file" required><br>
                         <label>Name: </label>
                         <input class="form-control" type="text" name="img_name" placeholder="img1" required><br>
-                        <label>Type: </label>
-                        <input class="form-control" type="text" name="img_type" placeholder="jpg" required><br>
-                        <label>Size (MB): </label>
-                        <input class="form-control" type="text" name="img_size" placeholder="1" required><br>
-                        <label>Dimension: </label>
-                        <input class="form-control" type="text" name="img_dimension" placeholder="512x512" required><br>
-
                         <label>Scope: </label>
-                        <input type="radio" name="img_private" id="img_private"
-                                      onclick='radar_handler("private")' checked> Private
-                        <input type="radio" name="img_public" id="img_public"
-                               onclick='radar_handler("public")'> Public <br>
+                        <input type="radio" name="img_private" id="img_private" onclick='radar_handler("private")' checked> Private
+                        <input type="radio" name="img_public" id="img_public" onclick='radar_handler("public")'> Public <br>
 
                         <button class="btn btn-primary" type="submit"> Create </button>
                     </form>

@@ -21,7 +21,7 @@ exports.login = function(req, res){
 exports.register = function(req, res){
     var user = req.body.ruser;
     var pass = req.body.rpassword;
-    model.create_user( { user:user, pass:pass }, home_ctrl.register(req, res));
+    model.create_user(user, pass, home_ctrl.register(req, res));
 }
 
 exports.read_users = function(req, res){
@@ -41,20 +41,20 @@ exports.logout = function(req, res){
 }
 
 exports.create_image = function(req, res){
-    var name = req.body.img_name;
-    model.search_image(name, logged_ctrl.create_image(req, res));
+    var user = req.cookies.user;
+    var image = req.body.img_name;
+    model.search_user_image(user, image, logged_ctrl.create_image(req, res));
 }
 
 exports.share_image = function(req, res){
-    var user = req.cookies.user;
-    var image = req.body.img_name_share;
-    model.search_user_image(user, image, logged_ctrl.share_image(req, res));
+    var user_share = req.body.img_user_share;
+    model.search_user(user_share, logged_ctrl.share_image(req, res));
 }
 
 exports.update_image = function(req, res){
     var user = req.cookies.user;
-    var name = req.body.img_name;
-    model.search_user_image(user, name, logged_ctrl.update_image(req, res));
+    var image = req.body.img_name;
+    model.search_user_image(user, image, logged_ctrl.update_image(req, res));
 }
 
 exports.delete_image = function(req, res){

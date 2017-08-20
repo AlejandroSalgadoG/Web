@@ -65,22 +65,17 @@
                 <div class="col-md-4 delimiting">
                     <h2> Update image </h2>
 
-                    <p> Only need to fill the values that you want to update: </p>
-
-                    <form action='/update_image' method="post">
+                    <form name="update_form" action='/update_image' onsubmit="return validate_update_form()" method="post">
                         <label>Name: </label>
                         <input class="form-control" type="text" name="img_name" required><br>
-                        <label>Type: </label>
-                        <input class="form-control" type="text" name="img_type"><br>
-                        <label>Size (MB): </label>
-                        <input class="form-control" type="text" name="img_size"><br>
-                        <label>Dimension: </label>
-                        <input class="form-control" type="text" name="img_dimension"><br>
+
+                        <p> Only need to modify the values that you want to update: </p>
+
+                        <label>New name: </label>
+                        <input class="form-control" type="text" name="img_new_name" id="img_new_name"><br>
                         <label>Scope: </label>
-                        <input type="radio" name="img_private2" id="img_private2"
-                                      onclick='radar_handler2("private")'> Private
-                        <input type="radio" name="img_public2" id="img_public2"
-                               onclick='radar_handler2("public")'> Public <br>
+                        <input type="radio" name="img_private2" id="img_private2" onclick='radar_handler2("private")'> Private
+                        <input type="radio" name="img_public2" id="img_public2" onclick='radar_handler2("public")'> Public <br>
 
                         <button class="btn btn-primary" type="submit"> Update </button>
                     </form>
@@ -127,7 +122,7 @@
 
                     <div class="row">
                         <% for(var i=0; i<search.length; i++){ %>
-                            <img src="<%= search[i].name+"."+search[i].type %>" style="width:300px;height:300px;">
+                            <img src="<%= search[i].file %>" style="width:300px;height:300px;">
                         <% } %>
                     </div>
                 </div>

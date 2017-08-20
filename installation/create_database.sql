@@ -11,6 +11,7 @@ CREATE TABLE users(
 
 CREATE TABLE images(
     id int AUTO_INCREMENT,
+    file varchar(32) NOT NULL,
     name varchar(32) NOT NULL,
     path varchar(32) NOT NULL,
     private varchar(5) NOT NULL,

@@ -122,12 +122,17 @@ Para garantizar este comportamiento que proteja la integridad y la privacidad de
 
 ## Herramientas:
 
-Passport.js
-LDAP (Lightweigh Directory Access Protocol)
-HTTPS
-SSL o TLS
-Encripción (scrypt, bcrypt, SQL Data Hashing)
-SonarQube
+* Passport.js
+
+* LDAP (Lightweigh Directory Access Protocol)
+
+* HTTPS
+
+* SSL o TLS
+
+* Encripción (scrypt, bcrypt, SQL Data Hashing)
+
+* SonarQube
 
 ## Bibliografía:
 

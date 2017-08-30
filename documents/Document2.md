@@ -136,9 +136,7 @@ Para garantizar este comportamiento que proteja la integridad y la privacidad de
 
 ## Bibliografía:
 
-Ramesh Nagappan, Christopher Steel. Core Security Patterns: Best Practices and Strategies for J2EE, Web Services and Identity Management, Prentice Hall, 2005.
-
-
+* Ramesh Nagappan, Christopher Steel. Core Security Patterns: Best Practices and Strategies for J2EE, Web Services and Identity Management, Prentice Hall, 2005.
 * https://en.wikipedia.org/wiki/Security_pattern#cite_ref-6
 * https://security.berkeley.edu/secure-coding-practice-guidelines
 * https://view.officeapps.live.com/op/view.aspx?src=http://dis.unal.edu.co/~icasta/GGP/_Ver_2009_1/GGP_2009_1_gr3/GGP20091GR3_Entregas/GGP20091GR3_E3/SoftdellaFunk_Especificacion_Requerimientos_No_Funcionales.doc

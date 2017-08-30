@@ -10,7 +10,7 @@ Para garantizar este comportamiento que proteja la integridad y la privacidad de
 
 ## Vistas de Arquitectura:
 
-![alt text](https://ibb.co/hA0v6k "Vista Arquitectura Seguridad")
+![](https://github.com/AlejandroSalgadoG/Web/blob/master/documents/img/architecture-view-security.PNG "Vista Arquitectura Seguridad")
 
 ## Acceso a perfil:
 

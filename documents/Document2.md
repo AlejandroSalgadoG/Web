@@ -15,37 +15,57 @@ Para garantizar este comportamiento que proteja la integridad y la privacidad de
 ## Acceso a perfil:
 
 **Fuente:** Cliente.
+
 **Estímulo:** Inicio de sesión.
+
 **Artefacto:** Datos de Usuario.
+
 **Ambiente:** Operaciones de autenticación.
+
 **Respuesta:** Validación de entrada de usuario.
+
 **Medición:** Petición correctamente validada.
 
 ## Modificación de datos de perfil:
 
 **Fuente:** Cliente.
+
 **Estímulo:** Modificación de datos de usuario.
+
 **Artefacto:** Datos de Usuario.
+
 **Ambiente:** Operaciones de modificación.
+
 **Respuesta:** Validación de credenciales y modificación de datos de perfil si la validación es correcta.
+
 **Medición:** Modificación de datos de perfil o error en la validación de credenciales.
 
 ## Modificación de contenido existente:
 
 **Fuente:** Cliente.
+
 **Estímulo:** Modificar contenido existente.
+
 **Artefacto:** Datos de contenido.
+
 **Ambiente:** Operaciones de modificación.
+
 **Respuesta:** Validación de credenciales y modificación de datos de contenido si la validación de correcta.
+
 **Medición:** Modificación de datos de contenido o error en la validación de credenciales.
 
 ## Visualización de contenido existente:
 
 **Fuente:** Cliente.
+
 **Estímulo:** Cargar imágenes públicas de la aplicación y privadas del usuario en sesión.
+
 **Artefacto:** Datos de contenido.
+
 **Ambiente:** Operaciones de lectura.
+
 **Respuesta:** Validación de credenciales y listado de las imágenes correspondientes.
+
 **Medición:** Lista de contenido público y la contenido privado del usuario en sesión correctamente presentados..
 
 # Diseño:

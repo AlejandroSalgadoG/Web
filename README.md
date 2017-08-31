@@ -229,48 +229,112 @@ de manera explicita.
     $ sudo yum install epel-release  # repositorio extra donde se encuentra el paquete de node
     $ sudo yum install nodejs
 
+## Configuracion de hostnames
+
+    Realizar la siguiente configuracion en todos los nodos
+    $ sudo hostnamectl set-hostname <hostname>
+    $ sudo vim /etc/hosts
+
+    <ip_nodo1>  <hostname_nodo1>
+    <ip_nodo2>  <hostname_nodo2>
+    <ip_nodo3>  <hostname_nodo3>
+    <ip_nodo4>  <hostname_nodo4>
+    <ip_nodo5>  <hostname_nodo5>
+
 ## Instalacion de la base de datos
 
     $ sudo yum install mariadb-server
     $ sudo systemctl start mariadb  # iniciar el servicio de base de datos
     $ sudo systemctl enable mariadb  # configurar el servicio para ejecutarce al iniciar la maquina
     $ sudo /usr/bin/mysql_secure_installation  # configuracion final de la base de datos
+    $ sudo firewall-cmd --zone=public --add-service=mysql --permanent
+    $ sudo firewall-cmd --reload
+
+## Configuracion Master-Master para base de datos
+
+    Servidor 1
+    $ sudo vim /etc/my.cnf
+
+    server-id=<id>
+    log-bin=mysql-bin
+
+    $ sudo systemctl restart mariadb
+    $ mysql -u root -p
+
+    mysql> create user '<user>'@'%' identified by '<password>';
+    mysql> grant replication slave on *.* to '<user>'@'%';
+    mysql> show master status; # guardar file y position
+    
+    Servidor 2
+    Repetir pasos anteriores, no olvidar cambiar id en /etc/my.cnf
+
+    mysql> slave stop;
+    mysql> change master to master_host=<ip_servidor1>, master_user='<user>', master_password='<password>', master_log_file='<log_file>', master_log_pos=<log_pos>;
+    mysql> slave start;
+    mysql> show slave status\G; # No deben salir errores
+
+    Servidor 1
+
+    mysql> slave stop;
+    mysql> change master to master_host=<ip_servidor2>, master_user='<user>', master_password='<password>', master_log_file='<log_file>', master_log_pos=<log_pos>;
+    mysql> slave start;
+    mysql> show slave status\G; # No deben salir errores
 
 ## Instalacion del servidor web
 
     $ sudo yum install httpd
     $ sudo systemctl start httpd
     $ sudo systemctl enable httpd
-    $ sudo vim /etc/httpd/conf.d/inv_proxy.conf  # archivo para la configuracion del proxy inverso
+    $ sudo setsebool -P httpd_can_network_connect 1  # configurar permisos de httpd en SElinux
+    $ sudo vim /etc/httpd/conf.d/balancer.conf  # archivo para la configuracion del balanceador de carga
 
 Agregar la configuracion de proxy inverso para el dca:
 
     <VirtualHost *:80>
-        ProxyPreserveHost On
+        <Proxy balancer://image_manager>
+            BalancerMember http://<ip_nodo>:<puerto>
+            BalancerMember http://<ip_nodo>:<puerto>
 
-        ProxyPass /image_manager http://127.0.0.1:3000/
-        ProxyPassReverse /image_manager http://127.0.0.1:3000/
+            ProxySet lbmethod=byrequests
+        </Proxy>
+
+        ProxyPass / balancer://image_manger
     </VirtualHost>
-
-Nota: como resultado de esta configuracion a las rutas de los fomularios en la vista
-se les debe agregar la ruta /image_manger al principio de las uri para que sean bien
-redirigidas por el servidor web.
-
-Agregar la configuracion de proxy inverso para el servidor digital ocean:
-
-    <VirtualHost *:80>
-        ProxyPreserveHost On
-
-        ProxyPass / http://127.0.0.1:3000/
-        ProxyPassReverse / http://127.0.0.1:3000/
-    </VirtualHost>
-
-## Configuracion de puertos
 
     $ sudo firewall-cmd --zone=public --add-service=http --permanent
     $ sudo firewall-cmd --zone=public --add-port=3000/tcp --permanent
     $ sudo firewall-cmd --reload
 
+## Configuracion de NFS
+    Servidor:
+    $ sudo yum install nfs-utils
+    $ sudo mkdir <carpeta_a_compartir>
+    $ sudo systemctl start rpcbind
+    $ sudo systemctl enable rpcbind
+    $ sudo systemctl start nfs-server
+    $ sudo systemctl enable nfs-server
+    $ sudo systemctl start rpc-statd
+    $ sudo systemctl start nfs-idmapd
+    $ sudo vim /etc/exports
+
+    /share <ip_cliente>/<mascara>(rw,sync,no_root_squash)
+
+    $ sudo exportfs -r
+    $ sudo firewall-cmd --zone=public --add-service=mountd
+    $ sudo firewall-cmd --zone=public --add-service=rpc-bind
+    $ sudo firewall-cmd --zone=public --add-service=nfs
+    $ sudo firewall-cmd --reload
+
+    Cliente:
+
+    $ sudo yum install nfs-utils
+    $ sudo mkdir <carpeta_compartida>
+    $ sudo systemctl start rpcbind
+    $ sudo systemctl enable rpcbind
+    $ sudo mount <ip_servidor>:/<carpeta_a_compartir> <carpeta_compartida>
+    $ sudo vim /etc/fstab
+
+    <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    defaults    0 0
 
 ## Configurar la aplicacion
 

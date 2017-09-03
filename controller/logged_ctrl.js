@@ -1,5 +1,6 @@
 var file_system = require('fs');
 var model = require('../model/model');
+var writter = require('./nfs_checker');
 
 //BEGIN GENERIC FUNCTIONS
 function get_json(user, msg){
@@ -35,7 +36,7 @@ exports.create_image = function(req, res){
                      path: 'share/',
                      scope: img_scope };
 
-    var img_path = img_info.path + img_info.file;
+    var img_path = img_info.path + user + "_" + img_info.file;
 
     return function(err, result){
         if (err) return res.render('logged', get_json(user, err));
@@ -43,6 +44,7 @@ exports.create_image = function(req, res){
 
         model.create_image(img_info, create_image_helper(req, res));
         file.mv(img_path, msg_fun(req, res, "Image created"));
+        writter.move(img_path, "/share/centos1");
     }
 }
 

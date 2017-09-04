@@ -33,10 +33,10 @@ exports.create_image = function(req, res){
 
     var img_info = { file: user+"_"+file.name,
                      name: req.body.img_name,
-                     path: '/share/centos'+getRandom(2),
+                     path: '/share/centos'+getRandom(2)+"/",
                      scope: img_scope };
 
-    img_path = "share/"+img_info.file;
+    img_path = "public/share/"+img_info.file;
 
     return function(err, result){
         if (err) return res.render('logged', get_json(user, err));

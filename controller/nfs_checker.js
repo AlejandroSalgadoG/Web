@@ -1,5 +1,7 @@
 var process = require('child_process');
 
+var timeout = 2 * 1000;
+
 function check(stat, src, dest){
     return function(){
         if (!stat.stdout._readableState.ended){
@@ -23,10 +25,10 @@ function check2(stat){
 function backup(src, dest){
     console.log("backup activated"); 
     stat = process.spawn('mv', [src, dest+'bk']);
-    setTimeout(check2(stat), 2000);
+    setTimeout(check2(stat), timeout);
 }
 
 exports.move = function(src, dest){
     stat = process.spawn('mv', [src, dest]);
-    setTimeout(check(stat, src, dest), 2000);
+    setTimeout(check(stat, src, dest), timeout);
 }

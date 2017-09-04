@@ -1,5 +1,4 @@
 node_modules
 .idea
-.idea/inspectionProfiles/
-share/*.jpg
-share/*.png
+public/share/*
+!public/share/explanation.txt

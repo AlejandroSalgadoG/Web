@@ -31,21 +31,25 @@ exports.create_image = function(req, res){
     var img_scope = "true";
     if (req.body.img_private != "on") img_scope = "false";
 
-    var img_info = { file: file.name,
+    var img_info = { file: user+"_"+file.name,
                      name: req.body.img_name,
-                     path: 'share/',
+                     path: '/share/centos'+getRandom(2),
                      scope: img_scope };
 
-    var img_path = img_info.path + user + "_" + img_info.file;
+    img_path = "share/"+img_info.file;
 
     return function(err, result){
         if (err) return res.render('logged', get_json(user, err));
         if (result.length != 0) return res.render('logged', get_json(user, "image already exists"));
 
         model.create_image(img_info, create_image_helper(req, res));
-        file.mv(img_path, msg_fun(req, res, "Image created"));
-        writter.move(img_path, "/share/centos1");
+        file.mv(img_path, err_fun(req, res));
+        writter.move(img_path, img_info.path);
     }
+}
+
+function getRandom(max) {
+    return Math.floor(Math.random() * max) + 1; 
 }
 
 function create_image_helper(req, res){

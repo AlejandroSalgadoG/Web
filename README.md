@@ -441,6 +441,23 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
 
     <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    defaults    0 0
 
+Configuracion de sincronizacion de archivos
+
+    Crontab
+    $ sudo vim /etc/crontab
+
+    * * * * * <user> rsync <other_host>:/share/ /sharebk --delete -r
+    
+    Rc-local
+    $ sudo yum install rsync
+    $ sudo chmod +x /etc/rc.d/rc.local
+    $ sudo vim /etc/rc.d/rc.local
+    
+    su <user> -c "rsync <other_host>:/sharebk/ /share --delete -r"
+    
+    $ sudo systemctl start rc-local
+    $ sudo systemctl enable rc-local
+
 ## Configurar la aplicacion
 
     $ git clone https://github.com/AlejandroSalgadoG/Web.git  # descargar codigo

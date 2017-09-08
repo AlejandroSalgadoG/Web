@@ -33,20 +33,8 @@ app.post('/update_image', routes.update_image);
 app.post('/share_image', routes.share_image);
 app.post('/delete_image', routes.delete_image);
 
-var start_fun = function(){
-    console.log("The application will connect to the database");
-    model.connect_db();
-};
-
-var end_fun = function(){
-    console.log("The application will disconnect from the database");
-    model.disconnect_db();
-    console.log('Good bye');
-    process.exit();
-};
-
-var server = app.listen(3000, start_fun);
-function cleanup(){ server.close( end_fun ); }
+var server = app.listen(3000);
+function cleanup(){ server.close(); }
 
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);

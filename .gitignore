@@ -1,4 +1,5 @@
 node_modules
 .idea
-public/share/*
-!public/share/explanation.txt
+public/share
+tmp/*
+tmp/explanation.txt

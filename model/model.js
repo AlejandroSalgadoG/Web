@@ -1,13 +1,13 @@
 var mysql = require('mysql');
 
 var info = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'alejandro',
     password: 'jaja19',
     database: 'image_manager',
 }
 
-var connection = mysql.createConnection(info);
+var connection = mysql.createPool(info);
 
 //BEGIN GENERIC FUNCTIONS
 var error_fun = function(err) {
@@ -23,16 +23,6 @@ function execute_query(query_var, callback_fun){
     );
 }
 //END GENERIC FUNCTIONS
-
-//BEGIN CONNECTION FUNCTIONS
-exports.connect_db = function(){
-    connection.connect(error_fun);
-}
-
-exports.disconnect_db = function(){
-    connection.end(error_fun);
-}
-//END CONNECTION FUNCTIONS
 
 exports.consult_password = function(user, callback_fun){
     var query_var = 'SELECT password FROM users WHERE user="'+user+'";';

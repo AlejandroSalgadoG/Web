@@ -33,10 +33,10 @@ exports.create_image = function(req, res){
 
     var img_info = { file: user+"_"+file.name,
                      name: req.body.img_name,
-                     path: '/share/centos'+getRandom(2)+"/",
+                     path: '/share/centos'+getRandom(3,5)+"/",
                      scope: img_scope };
 
-    img_path = "public/share/"+img_info.file;
+    img_path = "tmp/"+img_info.file;
 
     return function(err, result){
         if (err) return res.render('logged', get_json(user, err));
@@ -44,12 +44,14 @@ exports.create_image = function(req, res){
 
         model.create_image(img_info, create_image_helper(req, res));
         file.mv(img_path, err_fun(req, res));
-        writter.move(img_path, img_info.path);
+        callback = { good: msg_fun(req, res, "image created"),
+                     bad: msg_fun(req, res, "ERROR creating the image") };
+        writter.move(img_path, img_info.path, callback);
     }
 }
 
-function getRandom(max) {
-    return Math.floor(Math.random() * max) + 1; 
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
 }
 
 function create_image_helper(req, res){

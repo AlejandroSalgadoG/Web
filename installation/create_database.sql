@@ -1,6 +1,3 @@
-DROP DATABASE image_manager;
-
-CREATE DATABASE image_manager;
 USE image_manager;
 
 CREATE TABLE users(
@@ -26,14 +23,3 @@ CREATE TABLE associations(
     CONSTRAINT FK_userid FOREIGN KEY (userid) REFERENCES users(user),
     CONSTRAINT FK_imageid FOREIGN KEY (imageid) REFERENCES images(id)
 );
-
-/*
-INSERT INTO users (user, password) VALUES ('alejandro', 'jaja19');
-INSERT INTO images (id, name, path, private) VALUES (1, 'img1', 'share/', 'true');
-INSERT INTO associations (userid, imageid, owner) VALUES ('alejandro', 1, 'true');
-*/
-
-/*
-CREATE USER 'alejandro' IDENTIFIED BY 'jaja19';
-GRANT ALL ON image_manager.* TO alejandro;
-*/

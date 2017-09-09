@@ -226,6 +226,9 @@ de manera explicita.
 
 ## Instalacion de nodejs en el servidor
 
+    $ sudo yum install wget
+    $ wget http://springdale.math.ias.edu/data/puias/unsupported/7/x86_64//http-parser-2.7.1-3.sdl7.x86_64.rpm
+    $ sudo yum install http-parser-2.7.1-3.sdl7.x86_64.rpm
     $ sudo yum install epel-release  # repositorio extra donde se encuentra el paquete de node
     $ sudo yum install nodejs
 
@@ -376,7 +379,7 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
 
     $ mysql -u root -p
     mysql> CREATE DATABASE image_manager;
-    mysql> CREATE USER 'haproxy_check';
+    mysql> CREATE USER '<user>' IDENTIFIED BY '<password>';
     mysql> GRANT ALL ON image_manager.* TO '<user>' IDENTIFIED BY '<password>';
 
 ## Configuracion Master-Master para base de datos
@@ -390,15 +393,16 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
     $ sudo systemctl restart mariadb
     $ mysql -u root -p
 
-    mysql> create user '<user>'@'%' identified by '<password>';
-    mysql> grant replication slave on *.* to '<user>'@'%';
+    mysql> CREATE USER 'haproxy_check';
+    mysql> create user '<reply user>'@'%' identified by '<reply password>';
+    mysql> grant replication slave on *.* to '<reply user>'@'%';
     mysql> show master status; # guardar file y position
 
     Servidor 2
     Repetir pasos anteriores, no olvidar cambiar id en /etc/my.cnf
 
     mysql> slave stop;
-    mysql> change master to master_host='<ip_servidor1>', master_user='<user>', master_password='<password>', master_log_file='<log_file>', master_log_pos=<log_pos>;
+    mysql> change master to master_host='<ip_servidor1>', master_user='<reply user>', master_password='<reply password>', master_log_file='<log_file>', master_log_pos=<log_pos>;
     mysql> slave start;
     mysql> show slave status\G; # No deben salir errores
 
@@ -436,20 +440,20 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
     $ sudo chown <usuario>.<grupo> <carpeta_a_compartir>
     $ sudo systemctl start rpcbind
     $ sudo systemctl enable rpcbind
-    $ sudo mount <ip_servidor>:/<carpeta_a_compartir> <carpeta_compartida> bg,soft,timeo=2
+    $ sudo mount <ip_servidor>:/<carpeta_a_compartir> <carpeta_compartida> -o bg,soft,timeo=1
     $ sudo vim /etc/fstab
 
-    <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    bg,soft,timeo=2    0 0
+    <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    bg,soft,timeo=1    0 0
 
 Configuracion de sincronizacion de archivos
 
     Crontab
+    $ sudo yum install rsync
     $ sudo vim /etc/crontab
 
     * * * * * <user> rsync <other_host>:/share/ /sharebk --delete -r
     
     Rc-local
-    $ sudo yum install rsync
     $ sudo chmod +x /etc/rc.d/rc.local
     $ sudo vim /etc/rc.d/rc.local
     
@@ -463,7 +467,7 @@ Configuracion de sincronizacion de archivos
     $ git clone https://github.com/AlejandroSalgadoG/Web.git  # descargar codigo
     $ cd Web/installation
     $ ./install_dependencies.sh
-    $ mysql -h 127.0.0.1 -u haproxy_root -p < create_database.sql
+    $ mysql -h 127.0.0.1 -u <user> -p < create_database.sql
 
     $ sudo firewall-cmd --zone=public --add-port=3000/tcp --permanent
     $ sudo firewall-cmd --reload

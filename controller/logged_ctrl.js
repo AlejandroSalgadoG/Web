@@ -33,7 +33,7 @@ exports.create_image = function(req, res){
 
     var img_info = { file: user+"_"+file.name,
                      name: req.body.img_name,
-                     path: '/share/centos'+getRandom(3,5),
+                     path: '/share/fserver'+getRandom(1,4),
                      scope: img_scope };
 
     img_path = "tmp/"+img_info.file;

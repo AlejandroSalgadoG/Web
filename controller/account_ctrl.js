@@ -1,5 +1,6 @@
 var file_system = require('fs');
 var model = require('../model/model');
+var writter = require('./nfs_checker');
 
 //BEGIN GENERIC FUNCTIONS
 function err_fun(req, res){
@@ -51,8 +52,9 @@ function delete_image_association_helper(req, res, info){
         if (err) return res.render('account', { msg: err });
 
         model.delete_image(info.img, err_fun(req, res));
-        var img_path = info.path+info.file;
-        file_system.unlink(img_path, err_fun(req, res));
+        callback = { good: err_fun(req, res),
+                     bad: err_fun(req, res) };
+        writter.remove(info.path, info.file, callback);
     }
 }
 

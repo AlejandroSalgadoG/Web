@@ -436,10 +436,10 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
     $ sudo chown <usuario>.<grupo> <carpeta_a_compartir>
     $ sudo systemctl start rpcbind
     $ sudo systemctl enable rpcbind
-    $ sudo mount <ip_servidor>:/<carpeta_a_compartir> <carpeta_compartida>
+    $ sudo mount <ip_servidor>:/<carpeta_a_compartir> <carpeta_compartida> bg,soft,timeo=2
     $ sudo vim /etc/fstab
 
-    <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    defaults    0 0
+    <ip_servidor>:<carpeta_a_compartir> <carpeta_compartida>    nfs    bg,soft,timeo=2    0 0
 
 Configuracion de sincronizacion de archivos
 

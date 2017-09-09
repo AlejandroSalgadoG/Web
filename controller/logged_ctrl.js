@@ -33,7 +33,7 @@ exports.create_image = function(req, res){
 
     var img_info = { file: user+"_"+file.name,
                      name: req.body.img_name,
-                     path: '/share/centos'+getRandom(3,5)+"/",
+                     path: '/share/centos'+getRandom(3,5),
                      scope: img_scope };
 
     img_path = "tmp/"+img_info.file;
@@ -143,8 +143,9 @@ function delete_image_helper(req, res, info){
         if (err) return res.render('logged', get_json(info.user, err));
 
         model.delete_image(info.img, err_fun(req, res));
-        var img_path = info.path + info.file;
-        file_system.unlink(img_path, msg_fun(req, res, "Image deleted"));
+        callback = { good: msg_fun(req, res, "image deleted"),
+                     bad: msg_fun(req, res, "ERROR deleting the image") };
+        writter.remove(info.path, info.file, callback);
     }
 }
 //END IMAGE DELETE

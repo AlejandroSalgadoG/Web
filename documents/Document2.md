@@ -352,9 +352,9 @@ Finalmente se encontró que algunas de las mejores prácticas para este atributo
 
 **Artefacto:** Sistema de archivos
 
-**Ambiente:** Nodo de almacenamiento sin espacio disponible
+**Ambiente:** Nodo de almacenamiento sin conexion de red
 
-**Respuesta:** Nodo de aplicación guarda información en otro nodo
+**Respuesta:** Nodo de aplicación guarda información en su nodo de respaldo
 
 **Medida de respuesta:** La aplicación mantiene su funcionamiento sin pérdida de datos
 
@@ -413,11 +413,34 @@ Finalmente se encontró que algunas de las mejores prácticas para este atributo
 
 ## Patrones de arquitectura, best practices, tacticas y herramientas:
 
-Los patrones de arquitectura que serán implementados en el proyecto 2 serán un Failover para los balanceadores, una estructura redundante de bases de MySql en configuración Master-Master que permite tener disponibilidad y un cierto grado de consistencia, por último se utilizará replicación de datos en los nodos de almacenamiento para garantizar disponibilidad y particionamiento ya que se considera que las imágenes no son datos sensibles que deben tener un alto grado de consistencia.
+Los patrones de arquitectura que serán implementados en el proyecto 2 serán un
+Failover para los balanceadores, una estructura redundante de bases de MySql en
+configuración Master-Master que permite tener disponibilidad y un cierto grado
+de consistencia, por último se utilizará replicación de datos en los nodos de
+almacenamiento para garantizar disponibilidad y particionamiento ya que se
+considera que las imágenes no son datos sensibles que deben tener un alto grado
+de consistencia.
 
-Las best practices implementadas son stateless sessions gracias a una implementación basada en cookies, aislamiento de nodos que no respondan al monitoreo del balanceador de cargas, llamadas asincrónicas en los servicios que se le proporcionan al cliente, implementación de una arquitectura simple que facilite la extensibilidad y mantenibilidad del código de la aplicación y aislamiento de la lógica de la aplicación de un servidor en particular.
+Las best practices implementadas son stateless sessions gracias a una
+implementación basada en cookies, aislamiento de nodos que no respondan al
+monitoreo del balanceador de cargas, llamadas asincrónicas en los servicios que
+se le proporcionan al cliente, implementación de una arquitectura simple que
+facilite la extensibilidad y mantenibilidad del código de la aplicación y
+aislamiento de la lógica de la aplicación de un servidor en particular.
 
-Además de las herramientas mencionadas anteriormente se piensa utilizar el protocolo rsync para mantener una copia de seguridad de los archivos en los nodos de almacenamiento y se utilizar el sistema de archivos distribuido NFS para acceder a los archivos almacenados debido a la transparencia y facilidad que permitía a nivel de la aplicación web.
+Además de las herramientas mencionadas anteriormente se piensa utilizar el
+protocolo rsync para mantener una copia de seguridad de los archivos en los
+nodos de almacenamiento y se utilizar el sistema de archivos distribuido NFS
+para acceder a los archivos almacenados debido a la transparencia y facilidad
+que permitía a nivel de la aplicación web.
+
+Se planea hacer uso de Corosync y pacemaker para el monitoreo e implementación
+del failover, esto debido a que permiten mantener un monitoreo constante sobre
+los balanceadores, la aplicación y las bases de datos. Además de contar con un
+sistema de manejo fácil y eficiente como lo es la herramienta pcs, la cual
+permite ejecutar comandos en todos los nodos del cluster de manera simultánea,
+optimizando el tiempo de configuración y minimizando complicaciones a
+la hora de realizar instalaciones o revisiones de los recursos.
 
 ---
 

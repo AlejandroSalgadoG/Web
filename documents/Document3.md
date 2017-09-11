@@ -67,14 +67,14 @@ que accedía a los recursos del servidor. Por otro lado, se generó un certifica
 a través de Let's Encrypt, para encriptar el canal de comunicación a través de HTTPS
 al dominio del proyecto 14 (https://proyecto14.dis.eafit.edu.co). Con este certificado
 se configuró el servidor con HAproxy que redireccionaría al servidor privado de la aplicación.
+Además, se verificó que el firewall de los servidores estuviera correctamente configurado,
+evitando así que existieran puertos que hayan sido abiertos por accidente y pudieran ser
+objeto de vulnerabilidades.
 
 Las pruebas que se realizaron fueron:
 
-* Encripción y verificación de contraseñas
-* Verificación de tokens a través de GoogleAuth y OAuth2
 * Verificación de canal encriptado HTTPS al HAproxy público
 
-En cada caso de pruebas, funcionó correctamente. Se tuvo problemas con el certificado SSL
-debido a que se llego al límite de certificados para el dominio eafit.edu.co, por lo que
-se uso el mismo certificado de st063.dis.eafit.edu.co. Haciendo que el canal no sea reconocido
-como seguro en el HAproxy público.
+Se tuvo problemas con el certificado SSL debido a que se llego al límite de certificados
+para el dominio eafit.edu.co, por lo que se uso el mismo certificado de st063.dis.eafit.edu.co.
+Haciendo que el canal no sea reconocidocomo seguro en el HAproxy público.

@@ -331,7 +331,7 @@ Los siguientes comandos solo se necesitan ejecutar en un solo nodo
 
     $ sudo pcs resource create virtual_ip_haproxy ocf:heartbeat:IPaddr2 ip=<ip virtual> cidr_netmask=24 op monitor interval=10s
 
-## Configuracion HAproxy
+## Configuracion HAproxy privado
 
     $ sudo yum install haproxy
     $ sudo firewall-cmd --zone=public --add-service=http --permanent
@@ -367,6 +367,34 @@ Los siguientes comandos solo deben ser ejecutados en un nodo
 
     $ sudo pcs resource create haproxy ocf:heartbeat:haproxy op monitor interval=10s
     $ sudo pcs resource clone haproxy
+   
+## Configuración de HAproxy público
+
+Se instalaba certbot de Let's Encrypt en el nodo2 del diagrama:
+
+    $ wget https://dl.eff.org/certbot-auto
+    $ chmod a+x certbot-auto
+
+Se generaba un nuevo certificado para el dominio el proyecto particular (Proyecto 14):
+
+    $ sudo /root/certbot-auto certonly --cert-path /etc/letsencrypt/archive/st0263.dis.eafit.edu.co --expand -d proyecto14.dis.eafit.edu.co
+
+    $ sudo /root/certbot-auto certonly -d st0263.dis.eafit.edu.co  --expand -d proyecto14.dis.eafit.edu.co
+    
+Posteriormente se añaden las entradas a la configuracion de HAproxy en /etc/haproxy/haproxy.cfg:
+
+    $ sudo vim /etc/haproxy/haproxy.cfg
+    
+Se añaden las siguientes entradas:
+
+    bind proyecto14.dis.eafit.edu.co:443    ssl     crt     /etc/haproxy/certs/st0263.pem
+    acl host_proyecto14(host) -i proyecto14.dis.eafit.edu.co
+    use_backend proyecto14_cluster if host_proyecto14
+    backend proyecto14_cluster
+        balance leastconn
+        option httpclose
+        cookie JESSIONID prefix
+        server node1 10.131.137.145:80
 
 ## Instalacion de la base de datos
 

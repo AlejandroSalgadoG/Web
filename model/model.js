@@ -31,7 +31,6 @@ exports.consult_password = function(user, callback_fun){
 }
 
 exports.create_user = function(user, pass, callback_fun){
-    pass = bcrypt.hashSync(pass, bcrypt.genSaltSync(10));
     var query_var = 'INSERT INTO users VALUES ("'+user+'", "'+pass+'");';
     execute_query(query_var, callback_fun);
 }

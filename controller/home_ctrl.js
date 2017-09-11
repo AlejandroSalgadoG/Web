@@ -11,7 +11,7 @@ exports.login = function(req, res){
         var pass = req.body.password;
         var true_pass = result[0].password;
 
-        if (!bcrypt.compareSync(pass, true_pass)) return res.render('home', { msg:"Bad password" });
+        if (pass !== true_pass) return res.render('home', { msg:"Bad password" });
 
         res.cookie('user', user);
         res.render('logged', { user:user, search:{}, msg:"" });

@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+var bcrypt = require('bcryptjs');
 
 var info = {
     host: '127.0.0.1',
@@ -30,6 +31,7 @@ exports.consult_password = function(user, callback_fun){
 }
 
 exports.create_user = function(user, pass, callback_fun){
+    pass = bcrypt.hashSync(pass, bcrypt.genSaltSync(10));
     var query_var = 'INSERT INTO users VALUES ("'+user+'", "'+pass+'");';
     execute_query(query_var, callback_fun);
 }

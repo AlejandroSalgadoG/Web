@@ -14,6 +14,7 @@
 * NFS
 * Corosync
 * Pacemaker
+* JMeter
 * Pcs
 * Rsync
 * Git
@@ -78,3 +79,21 @@ Las pruebas que se realizaron fueron:
 Se tuvo problemas con el certificado SSL debido a que se llego al límite de certificados
 para el dominio eafit.edu.co, por lo que se uso el mismo certificado de st063.dis.eafit.edu.co.
 Haciendo que el canal no sea reconocidocomo seguro en el HAproxy público.
+
+### Rendimiento
+Para la optimizacion del rendimiento de la aplicacion lo primero que se realizo fue la rutina de pruebas de JMeter, la cual nos mostrara cual era el tiempo de respuesta de cada una de las funciones de la aplicaciones y nos permitiera ver cuales eran las partes que requerian de modificaciones para mejorar su desempeño, la prueba (que se puede encontrar en la carpeta /JMeterTest) sigue los siguientes pasos:
+
+Pasos de la prueba para cada hilo de usuario:
+
+* Se verifica la lista de usuarios existentes
+* Se crea un nuevo usuario con el nombre JMeterTest{#Hilo} para generar nombre unicos y con la contraseña "123".
+* Se loguea con dicho usuario.
+* Se accede a la libreria de imagenes publicas y compratidas.
+* Se cambia la contraseña de la cuenta por "345".
+* Finalmente se elimina el usuario creado 
+
+A partir de esto se determino que la aplicacion para todos los servicios tiene un tiempo de respuesta promedio de 183ms y una tasa de respuesta o 'throughput' de 3/seg, esto teniendo en cuenta que se tienen las siguientes implementaciones para el rendimiento:
+
+1. Load balancer tanto para el servidor de aplicaciones como para la conexion con la base de datos.
+
+2. Subida de archivos asincrona con la ayuda de una ubicacion temporal en el directorio raiz de la aplicacion.

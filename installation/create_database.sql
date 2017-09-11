@@ -2,7 +2,7 @@ USE image_manager;
 
 CREATE TABLE users(
     user varchar(32),
-    password varchar(32) NOT NULL,
+    password varchar(60) NOT NULL,
     PRIMARY KEY (user)
 );
 

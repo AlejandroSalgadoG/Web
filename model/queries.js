@@ -2,7 +2,7 @@ var mysql = require('mysql');
 
 var info = {
     host: '127.0.0.1',
-    user: 'asalgad2',
+    user: 'alejandro',
     password: 'jaja19',
     database: 'image_manager',
 }

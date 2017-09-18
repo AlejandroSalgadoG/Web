@@ -6,8 +6,8 @@ var mysql = require('mysql');
 
 var info = {
     host: '127.0.0.1',
-    user: 'root',
-    password: 'Maximiliano0239',
+    user: 'alejandro',
+    password: 'jaja19',
     database: 'image_manager',
 }
 

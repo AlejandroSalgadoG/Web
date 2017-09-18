@@ -527,7 +527,7 @@ Primero se instancia el modulo y se configura el TTL y el periodo de verificacio
     const NodeCache = require( "node-cache" );
     const FileCache = new NodeCache( { stdTTL: 360, checkperiod: 120 } );
     
-## 6. Documentacion de rendimiento
+## 6. Documentacion de seguridad
 
 ## Configuración de HAproxy público
 

@@ -1,5 +1,5 @@
 var file_system = require('fs');
-var model = require('../model/model');
+var model = require('../model/queries');
 var writter = require('./nfs_checker');
 var async = require('async');
 

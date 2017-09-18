@@ -3,8 +3,9 @@ var file_system = require('fs');
 var home_ctrl = require('./home_ctrl');
 var logged_ctrl = require('./logged_ctrl');
 var account_ctrl = require('./account_ctrl');
+var queries = require('../model/queries');
 
-var model = require('../model/model');
+var model = require('../model/queries');
 
 //BEGIN ROOT FUNCTION
 exports.home = function(req, res){
@@ -15,13 +16,21 @@ exports.home = function(req, res){
 //BEGIN HOME FUNCTIONS
 exports.login = function(req, res){
     var user = req.body.user;
-    model.consult_password(user, home_ctrl.login(req, res));
+    console.log('User: ' + user);
+    //model.consult_password(user, home_ctrl.login(req, res));
+    if (req.body.remember) {
+        req.session.cookie.maxAge = 1000 * 60 * 3;
+      } else {
+        req.session.cookie.expires = false;
+      }
 }
 
 exports.register = function(req, res){
     var user = req.body.ruser;
     var pass = req.body.rpassword;
-    model.create_user(user, pass, home_ctrl.register(req, res));
+    console.log('register');
+    //model.create_user(user, pass, home_ctrl.register(req, res));
+    res.render('logged.ejs', { message: req.flash('signupMessage') });
 }
 
 exports.read_users = function(req, res){
@@ -36,6 +45,7 @@ exports.manage_account = function(req, res){
 }
 
 exports.logout = function(req, res){
+    req.logout();
     res.clearCookie('user');
     res.redirect('/');
 }

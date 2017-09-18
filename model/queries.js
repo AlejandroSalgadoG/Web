@@ -24,6 +24,11 @@ function execute_query(query_var, callback_fun){
 }
 //END GENERIC FUNCTIONS
 
+exports.consult_password = function(user, callback_fun){
+    var query_var = 'SELECT password FROM users WHERE user="'+user+'";';
+    execute_query(query_var, callback_fun);
+}
+
 exports.consult_users = function(callback_fun){
     var query_var = 'SELECT user FROM users;';
     execute_query(query_var, callback_fun);

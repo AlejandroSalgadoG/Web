@@ -507,3 +507,23 @@ Configuracion de sincronizacion de archivos
     $ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u asalgad2 --hp /home/asalgad2
     $ pm2 start app.js
     $ pm2 save
+---
+## 5. Documentacion de rendimiento
+
+Para el cache se uso el modulo node-cache, el cual guarda objetos en memoria, este fue usado para hacer cache de los
+archivos y su docuemntacion puede ser encontrada aqui:
+
+https://www.npmjs.com/package/node-cache
+
+Cada imagen es almacanada en cache cuando se crea y tambien cuando se obtiene a traves de una busqueda, cada imagen 
+tiene un TTL de 6 minutos en el cache, adicion a esto cada 2 minutos se verifica si se han tenido HIT's y se extiende 
+el tiempo de vida nuevamente, los caches son propios de cada servidor de aplicaciones y por lo tanto se maneja de forma 
+independendiente 
+
+## Configuracion del node cache
+
+Primero se instancia el modulo y se configura el TTL y el periodo de verificacion
+
+    const NodeCache = require( "node-cache" );
+    const FileCache = new NodeCache( { stdTTL: 360, checkperiod: 120 } );
+    

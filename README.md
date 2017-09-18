@@ -527,3 +527,93 @@ Primero se instancia el modulo y se configura el TTL y el periodo de verificacio
     const NodeCache = require( "node-cache" );
     const FileCache = new NodeCache( { stdTTL: 360, checkperiod: 120 } );
     
+## 6. Documentacion de rendimiento
+
+## Configuración de HAproxy público
+
+Se instalaba certbot de Let's Encrypt en el nodo2 del diagrama:
+
+    $ wget https://dl.eff.org/certbot-auto
+    $ chmod a+x certbot-auto
+
+Se generaba un nuevo certificado para el dominio el proyecto particular (Proyecto 14):
+
+    $ sudo /root/certbot-auto certonly --cert-path /etc/letsencrypt/archive/st0263.dis.eafit.edu.co --expand -d proyecto14.dis.eafit.edu.co
+
+    $ sudo /root/certbot-auto certonly -d st0263.dis.eafit.edu.co  --expand -d proyecto14.dis.eafit.edu.co
+    
+Posteriormente se añaden las entradas a la configuracion de HAproxy en /etc/haproxy/haproxy.cfg:
+
+    $ sudo vim /etc/haproxy/haproxy.cfg
+    
+Se añaden las siguientes entradas:
+
+    bind proyecto14.dis.eafit.edu.co:443    ssl     crt     /etc/haproxy/certs/st0263.pem
+    acl host_proyecto14(host) -i proyecto14.dis.eafit.edu.co
+    use_backend proyecto14_cluster if host_proyecto14
+    backend proyecto14_cluster
+        balance leastconn
+        option httpclose
+        cookie JESSIONID prefix
+        server node1 10.131.137.145:80
+
+## Configuracion de firewall
+
+Para la configuracion del firewall ser revisaron los puertos abiertos con el comando:
+
+    $ sudo netstat -atn 
+    
+Y se verifico que solo estuvieran abiertos los puertos usados por los servidores para la comunicacion entre ellos.
+
+## Autorizacion con Passport.js y LocalStrategy
+
+Se implemento una solución con Passport.js a traves de dos Named Local Strategies, 
+una para el Log In ('local-login') y para el Register ('local-signup') que hacian de middleware
+para el HTTP Request, validando la creacion y la autenticacion de los usuarios usando Passport.js.
+En caso de fallar la autenticacion, se redirige al usuario al home ('/'), en caso de autenticarse
+correctamente, el usuario es autenticado via cookie:
+
+    
+    app.post('/login', passport.authenticate('local-login', {
+        failureRedirect : '/',
+    }), function(req, res) {
+        var user = req.body.user;
+        res.cookie('user', user);
+        res.render('logged', { user:user, search:{}, msg:"" });
+    });
+
+    app.post('/register', passport.authenticate('local-signup', {
+		failureRedirect : '/',
+    }), function(req, res){
+        var user = req.body.user;
+        res.cookie('user', user);
+        res.render('home', { msg:"The user has been created" });
+    });
+    
+Para la autorizacion, se implemento un metodo como middleware que valida cada HTTP Request hecho
+a cada uno de los recursos del servidor:
+
+    function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
+    }
+
+La funcion es refernciada en cada una de las rutas. 
+En caso de fallar, redirecciona al usuario hacia el home ('/'), en caso de exito,
+el servidor permite el acceso al recurso.
+
+    app.get('/', routes.home);
+    app.get('/logout', isLoggedIn, routes.logout);
+    app.get('/read_users', routes.read_users);
+    app.get('/manage_account', isLoggedIn, routes.manage_account);
+    app.get('/search_images_by_name', isLoggedIn, routes.search_images_by_name);
+    app.get('/search_images_by_type', isLoggedIn, routes.search_images_by_type);
+
+    app.post('/delete_user', isLoggedIn, routes.delete_user);
+    app.post('/update_password', isLoggedIn, routes.update_password);
+    app.post('/create_image', isLoggedIn, routes.create_image);
+    app.post('/update_image', isLoggedIn, routes.update_image);
+    app.post('/share_image', isLoggedIn, routes.share_image);
+    app.post('/delete_image', isLoggedIn, routes.delete_image);  
+    
